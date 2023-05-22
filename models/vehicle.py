@@ -8,6 +8,7 @@ from sqlalchemy import Column, String, Integer, ForeignKey
 
 class Vehicle(BaseModel, Base):
     """Vehicle attributes"""
+    __tablename__ = "vehicles"
     client_id = Column(String(60), ForeignKey('state.id'), nullable=False)
     make = Column(String(30), nullable=False)
     model = Column(String(30), nullable=False)

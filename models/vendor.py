@@ -7,6 +7,7 @@ from base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, ForeignKey
 
 class Vendor(BaseModel, Base):
+    __tablename__ = "vendors"
     first_name = Column(String(60), nullable=False)
     last_name = Column(String(60), nullable=False)
     email = Column(String(60), nullable=False)

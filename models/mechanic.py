@@ -5,9 +5,10 @@ Class for mechanics
 
 from base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer
+from sqlalchemy.orm import relationship
 
 class Mechanic(BaseModel, Base):
-    __tablename__ = "mechanic"
+    __tablename__ = "mechanics"
     first_name = Column(String(60), nullable=False)
     last_name = Column(String(60), nullable=False)
     email = Column(String(60), nullable=False)
@@ -16,6 +17,8 @@ class Mechanic(BaseModel, Base):
     jobs_compeleted = Column(Integer, nullable=False, default=0)
     rating = Column(Integer, nullable=False, default=0)
     specialization = Column(String(60))
+    bids = relationship("Bids", backref="mechanic", cascade="all, delete, delete-orphan")
+    reviews = relationship("Reviews", backref="mechanic", cascade="all, delete, delete-orphan")
 
     def __init__(self, **kwargs):
         """initialize the subclass using the superclass"""

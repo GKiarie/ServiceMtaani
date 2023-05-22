@@ -4,14 +4,15 @@ Jobs class
 """
 
 from base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey, Boolean
 
 class Job(BaseModel, Base):
     """Job attributes"""
-    client_id = Column(String(60), ForeignKey('client.id'), nullable=False)
-    job_title = Column(String(60), nullable=False)
-    job_description = Column(String(120))
-    status = False
+    __tablename__ = "jobs"
+    client_id = Column(String(60), ForeignKey('clients.id'), nullable=False)
+    job_title = Column(String(200), nullable=False)
+    job_description = Column(String(500))
+    status = Column(Boolean, default=True)
 
     def __init__(self, **kwargs):
         """initialize the subclass using the superclass"""

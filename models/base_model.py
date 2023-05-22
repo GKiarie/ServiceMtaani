@@ -43,4 +43,3 @@ class BaseModel():
     def delete(self):
         """Delete the object from the database"""
         storage.delete(self)
-    
