@@ -4,15 +4,16 @@ Class for vendors
 """
 
 from base_model import BaseModel, Base
+from sqlalchemy import Column, String, Integer, ForeignKey
 
 class Vendor(BaseModel, Base):
-    first_name = ""
-    last_name = ""
-    email = ""
-    phone_number = 0
-    business_name = ""
-    orders_compeleted = 0
-    rating = 0
+    first_name = Column(String(60), nullable=False)
+    last_name = Column(String(60), nullable=False)
+    email = Column(String(60), nullable=False)
+    phone_number = Column(Integer, nullable=False)
+    business_name = Column(String(100), nullable=False)
+    orders_compeleted = Column(Integer, default=0, nullable=False)
+    rating = Column(Integer, default=0, nullable=False)
     
     def __init__(self, **kwargs):
         """initialize the subclass using the superclass"""

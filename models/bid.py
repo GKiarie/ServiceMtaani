@@ -11,8 +11,8 @@ class Bid(BaseModel, Base):
 
     __tablename__ = 'bids'
     mechanic_id = Column(String(50), ForeignKey('mechanic.id'), nullable=False)
-    job_id  = Column(String(50), ForeignKey('jobs.id'), nullable=Flase)
-    bid_amount = Column(Integer, nullable=False), default=0)
+    job_id  = Column(String(50), ForeignKey('jobs.id'), nullable=False)
+    bid_amount = Column(Integer, nullable=False, default=0)
 
     def __init__(self, **kwargs):
         """initialize the subclass using the superclass"""
