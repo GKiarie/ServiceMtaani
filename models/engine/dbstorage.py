@@ -28,7 +28,8 @@ class DBStorage:
         pwd = getenv("MYSQL_PWD")
         host = getenv("MYSQL_HOST")
         dtbs = getenv("MYSQL_DTBS")
-        self.__engine = ce(f'mysql+mysqldb://{user}:{pwd}@{host}/{dtbs}', pool_pre_ping=True)
+        #self.__engine = ce(f'mysql+mysqldb://{user}:{pwd}@{host}/{dtbs}', pool_pre_ping=True)
+        self.__engine = ce('mysql+mysqldb://admin:admin2023@localhost/service_mtaani', pool_pre_ping=True)
 
     def reload(self):
         """Reload data in the db"""
