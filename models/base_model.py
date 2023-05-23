@@ -2,7 +2,7 @@
 """This module contains the Base Class for Clients, Mechanics
 and Vendors Classses
 """
-from models.engine import storage
+import models
 from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
@@ -37,9 +37,9 @@ class BaseModel():
     def save(self):
         """Save the object to the database"""
         self.updated_at = datetime.now()
-        storage.new(self)
-        storage.save()
+        models.storage.new(self)
+        models.storage.save()
     
     def delete(self):
         """Delete the object from the database"""
-        storage.delete(self)
+        models.storage.delete(self)
