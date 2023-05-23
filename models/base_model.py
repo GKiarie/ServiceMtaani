@@ -22,8 +22,9 @@ class BaseModel():
                 self.id = str(uuid4())
                 self.created_at = datetime.now()
                 self.updated_at = self.created_at
-                for key, value in kwargs.items():
-                    setattr(self, key, value)
+                # Update to handle incase created_at or updated_at is missing
+            for key, value in kwargs.items():
+                setattr(self, key, value)
                 # storage.new(self)
     
     def __str__(self):
