@@ -12,7 +12,7 @@ class Part(BaseModel, Base):
     part_name = Column(String(60), nullable=False)
     part_description = Column(String(120))
     part_price = Column(Integer, nullable=False, default=0)
-    images = relationship("Image", backref='parts', cascade="all, delete, delete-orphan")
+    images = relationship("Image", backref='part', cascade="all, delete, delete-orphan")
     
     def __init__(self, **kwargs):
         """initialize the subclass using the superclass"""

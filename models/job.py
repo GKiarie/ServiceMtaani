@@ -5,6 +5,7 @@ Jobs class
 
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Boolean
+from sqlalchemy.orm import relationship
 
 class Job(BaseModel, Base):
     """Job attributes"""
@@ -13,6 +14,7 @@ class Job(BaseModel, Base):
     job_title = Column(String(200), nullable=False)
     job_description = Column(String(500))
     status = Column(Boolean, default=True)
+    bids = relationship("Bid", backref="job", cascade="all, delete, delete-orphan")
 
     def __init__(self, **kwargs):
         """initialize the subclass using the superclass"""

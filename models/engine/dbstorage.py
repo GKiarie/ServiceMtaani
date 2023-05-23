@@ -5,7 +5,7 @@ from models.job import Job
 from models.client import Client
 from models.bid import Bid
 from models.mechanic import Mechanic
-from models.orders import   Order
+from models.order import   Order
 from models.part import Part
 from models.review import Review
 from models.vehicle import Vehicle
@@ -45,7 +45,11 @@ class DBStorage:
 
     def save(self):
         """Commit the session to the db"""
-        self.__session.commit()
+        try:
+            self.__session.commit()
+        except Exception as error:
+            print(error)
+            self.__session.rollback()
 
     def delete(self, obj=None):
         """Delete an object"""
