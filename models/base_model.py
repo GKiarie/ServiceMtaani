@@ -6,11 +6,16 @@ import models
 from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, String, DateTime
 
 Base = declarative_base()
 
 class BaseModel():
     """Class to base all other classes on"""
+    id = Column(String(60), primary_key=True)
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now)
+    
     def __init__(self, **kwargs):
         if kwargs:
             if id not in kwargs.keys():
