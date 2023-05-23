@@ -8,12 +8,12 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Integer
 
 
-class Review(BaseModel):
+class Review(BaseModel, Base):
     """Review attributes"""
     __tablename__ = "reviews"
     client_id = Column(String(60), ForeignKey('clients.id'), nullable=False)
-    vendor_id = Column(String(60), ForeignKey('vendor.id'))
-    mechanic_id = Column(String(60), ForeignKey('mechanic.id'))
+    vendor_id = Column(String(60), ForeignKey('vendors.id'))
+    mechanic_id = Column(String(60), ForeignKey('mechanics.id'))
     description = Column(String(300))
     rating = Column(Integer, nullable=False)
 

@@ -10,11 +10,12 @@ from models.part import Part
 from models.review import Review
 from models.vehicle import Vehicle
 from models.vendor import Vendor
+from models.image import Image
 from sqlalchemy import create_engine as ce
 from sqlalchemy.orm import sessionmaker, scoped_session
 from os import getenv
 
-classes=[Job, Client, Bid, Mechanic, Order, Part, Review, Vehicle, Vendor]
+classes=[Job, Client, Bid, Mechanic, Order, Part, Review, Vehicle, Vendor, Image]
 
 class DBStorage:
     """Database Storage class"""
@@ -27,7 +28,7 @@ class DBStorage:
         pwd = getenv("MYSQL_PWD")
         host = getenv("MYSQL_HOST")
         dtbs = getenv("MYSQL_DTBS")
-        self.__engine = ce(f'mysql++mysqldb://{user}:{pwd}@{host}/{dtbs}', pool_pre_ping=True)
+        self.__engine = ce(f'mysql+mysqldb://{user}:{pwd}@{host}/{dtbs}', pool_pre_ping=True)
 
     def reload(self):
         """Reload data in the db"""

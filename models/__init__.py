@@ -4,4 +4,4 @@ Initialize the storage
 """
 from models.engine.dbstorage import DBStorage
 storage = DBStorage()
-storage.reload()
+#storage.reload()

@@ -17,8 +17,8 @@ class Mechanic(BaseModel, Base):
     jobs_compeleted = Column(Integer, nullable=False, default=0)
     rating = Column(Integer, nullable=False, default=0)
     specialization = Column(String(60))
-    bids = relationship("Bids", backref="mechanic", cascade="all, delete, delete-orphan")
-    reviews = relationship("Reviews", backref="mechanic", cascade="all, delete, delete-orphan")
+    bids = relationship("Bid", backref="mechanic", cascade="all, delete, delete-orphan")
+    reviews = relationship("Review", backref="mechanic", cascade="all, delete, delete-orphan")
 
     def __init__(self, **kwargs):
         """initialize the subclass using the superclass"""
