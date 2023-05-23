@@ -3,7 +3,7 @@
 Class Bids
 """
 
-from base_model import BaseModel, Base
+from models.base_model import BaseModel, Base
 from sqlalchemy import String, Integer, Column, ForeignKey
 
 class Bid(BaseModel, Base):

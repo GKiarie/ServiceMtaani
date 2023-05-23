@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """Module for the parts class"""
 
-from base_model import BaseModel, Base
+from models.base_model import BaseModel, Base
 from sqlalchemy import String, Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 
 class Part(BaseModel, Base):
     """Part attributes"""
@@ -11,8 +12,7 @@ class Part(BaseModel, Base):
     part_name = Column(String(60), nullable=False)
     part_description = Column(String(120))
     part_price = Column(Integer, nullable=False, default=0)
-    part_images=Column(String(200))
-    # /root/images/part345
+    images = relationship("Image", backref='parts', cascade="all, delete, delete-orphan")
     
     def __init__(self, **kwargs):
         """initialize the subclass using the superclass"""
