@@ -9,13 +9,14 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, DateTime
 
 Base = declarative_base()
+time = "%m/%d/%Y, %H:%M:%S"
 
 class BaseModel():
     """Class to base all other classes on"""
     id = Column(String(60), primary_key=True)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now)
-    
+
     def __init__(self, **kwargs):
         if kwargs:
             if id not in kwargs.keys():
@@ -30,15 +31,27 @@ class BaseModel():
     def __str__(self):
         """Return a string representation of the object"""
         attributes_dict = self.__dict__.copy()
-        attributes_dict['created_at'] = attributes_dict['created_at'].strftime("%m/%d/%Y, %H:%M:%S")
-        attributes_dict['updated_at'] = attributes_dict['updated_at'].strftime("%m/%d/%Y, %H:%M:%S")
+        attributes_dict['created_at'] = attributes_dict['created_at'].strftime(time)
+        attributes_dict['updated_at'] = attributes_dict['updated_at'].strftime(time)
         return f"Class: {self.__class__.__name__}, ID: {self.id}, DETAILS: {attributes_dict}"
     
     def to_str(self):
         attributes_dict = self.__dict__.copy()
-        attributes_dict['created_at'] = attributes_dict['created_at'].strftime("%m/%d/%Y, %H:%M:%S")
-        attributes_dict['updated_at'] = attributes_dict['updated_at'].strftime("%m/%d/%Y, %H:%M:%S")
+        attributes_dict['created_at'] = attributes_dict['created_at'].strftime(time)
+        attributes_dict['updated_at'] = attributes_dict['updated_at'].strftime(time)
         return f"Class: {self.__class__.__name__}, ID: {self.id}, DETAILS: {attributes_dict}"
+    
+    def to_dict(self):
+        """returns a dict containing all k,v of instance"""
+        new_dict = self.__dict__.copy()
+        if "created_at" in new_dict:
+            new_dict["created_at"] = new_dict["created_at"].strftime(time)
+        if "updated_at" in new_dict:
+            new_dict["updated_at"] = new_dict["updated_at"].strftime(time)
+        new_dict["__class__"] = self.__class__.__name__
+        if "_sa_instance_state" in new_dict:
+            del new_dict["_sa_instance_state"]
+        return new_dict
     
     def save(self):
         """Save the object to the database"""
