@@ -69,13 +69,21 @@ class DBStorage:
                 objs = self.__session.query(item).all()
                 for obj in objs:
                     key = obj.__class__.__name__ + "." + obj.id
-                    new_dict[key] = obj.to_str()
+                    new_dict[key] = obj
         if cls in classes:
             objs = self.__session.query(cls).all()
             for obj in objs:
                 key = obj.__class__.__name__ + "." + obj.id
-                new_dict[key] = obj.to_str()
+                new_dict[key] = obj
         return new_dict
+    
+    def get(self, cls, id):
+        """method to retrieve one object"""
+        objs = self.all(cls).values()
+        for obj in objs:
+            if obj.id == id:
+                return obj
+        return None
     
     def find(self, cls=None, attr=None, val=None):
         """Return an instance for a db entry"""
