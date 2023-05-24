@@ -69,3 +69,9 @@ class DBStorage:
                 key = obj.__class__.__name__ + "." + obj.id
                 new_dict[key] = obj.to_str()
         return new_dict
+
+    def find(self, cls=None, attr=None, val=None):
+        """Return an instance for a db entry"""
+        if cls in classes:
+            obj = self.__session.query(cls).filter(getattr(cls, attr) == val).first()
+        return obj
