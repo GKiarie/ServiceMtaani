@@ -65,9 +65,9 @@ def mech_reviews(mechanic_id=None, review_id=None):
         abort(404)
     if not review_id:
         if request.method == "GET":
-            all_reviews = storage.all(Review)
+            #all_reviews = storage.all(Review).values()
             mech_reviews = [one_review.to_dict() for one_review in \
-                            all_reviews if one_review.id == mechanic_id]
+                            mech_obj.reviews]
             return jsonify(mech_reviews), 200
         if request.method == "POST":
             review_dict = request.get_json()
@@ -79,6 +79,7 @@ def mech_reviews(mechanic_id=None, review_id=None):
                 abort(400, "Incomplete information")
             review_dict["mechanic_id"] = mechanic_id
             review_obj = Review(**review_dict)
+            review_obj.save()
             return jsonify(review_obj.to_dict()), 200
         
         if review_id:
