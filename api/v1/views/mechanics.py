@@ -14,7 +14,7 @@ from models import storage
 @app_views.route('/mechanics', \
                  methods=["GET", "POST"], strict_slashes=False)
 @app_views.route('/mechanics/<mechanic_id>', \
-                 methods=["GET", "PUT", "DELETE"])
+                 methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def get_mechanics(mechanic_id=None):
     all_mechs = storage.all(Mechanic)
     if not mechanic_id:
@@ -56,7 +56,7 @@ def get_mechanics(mechanic_id=None):
 @app_views.route("/mechanics/<mechanic_id>/reviews", \
                  methods=["GET", "POST"], strict_slashes=False)
 @app_views.route("/mechanics/<mechanic_id>/reviews/<review_id>", \
-                 methods=["GET", "POST", "DELETE"], strict_slashes=False)
+                 methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def mech_reviews(mechanic_id=None, review_id=None):
     if not mechanic_id:
         abort(400)
