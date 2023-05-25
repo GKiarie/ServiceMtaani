@@ -7,7 +7,7 @@ from models.client import Client
 from flask import jsonify, request, abort
 
 
-@app_views.route('/jobs', methods=["GET"], strict_slashes=False)
+@app_views.route('/jobs', methods=["GET", "POST"], strict_slashes=False)
 @app_views.route("/jobs/<job_id>",
                  methods=["GET", "DELETE", "PUT"], strict_slashes=False)
 def get_all_jobs(job_id=None):
@@ -17,10 +17,25 @@ def get_all_jobs(job_id=None):
     if not job_id:
         if request.method == "GET":
             return jsonify(job_dicts), 200
+        if request.method == "POST":
+            job_attrs = request.get_json()
+            if not job_attrs or type(job_attrs) is not dict:
+                abort(400, "Invalid input")
+            if job_attrs.get("client_id") is None or \
+                job_attrs.get("job_title") is None:
+                abort(400, "Incomplete information")
+            client_id = job_attrs.get("client_id")
+            client_obj = storage.get(Client, client_id)
+            if not client_obj:
+                abort(404, "Invalid Client Id")
+            job_obj = Job(**job_attrs)
+            job_obj.save()
+            return jsonify(job_obj.to_dict()), 201
+        
     else:
         obj = storage.get(Job, job_id)
         if not obj:
-            abort(404)
+            abort(404, "Invalid Job Id")
         if request.method == "GET":
             return jsonify(storage.get(Job, job_id).to_dict()), 200
         elif request.method == "PUT":
