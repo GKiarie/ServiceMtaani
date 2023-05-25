@@ -1,74 +1,74 @@
 #!/usr/bin/python3
-"""Create API routes for the mechanics
-Routes: /mechanics/<mechanic_id>
-      : /mechanics/<mechanic_id>/reviews/<review_id>
+"""Create API routes for the vendors
+Routes: /vendors/<vendor_id>
+      : /vendors/<vendor_id>/reviews/<review_id>
 """
 
 from api.v1.views import app_views
 from flask import jsonify, request, abort
-from models.mechanic import Mechanic
+from models.vendor import Vendor
 from models.review import Review
 from models import storage
 
 
-@app_views.route('/mechanics', \
+@app_views.route('/vendors', \
                  methods=["GET", "POST"], strict_slashes=False)
-@app_views.route('/mechanics/<mechanic_id>', \
+@app_views.route('/vendors/<vendor_id>', \
                  methods=["GET", "PUT", "DELETE"], strict_slashes=False)
-def get_mechanics(mechanic_id=None):
-    all_mechs = storage.all(Mechanic)
-    if not mechanic_id:
+def get_vendors(vendor_id=None):
+    all_vendors = storage.all(Vendor)
+    if not vendor_id:
         if request.method == "GET":
-            mechs_list = [mech.to_dict() for mech in all_mechs.values()]
-            return jsonify(mechs_list), 200
+            vendors_list = [vendor.to_dict() for vendor in all_vendors.values()]
+            return jsonify(vendors_list), 200
         if request.method == "POST":
-            mech_attrs = request.get_json()
-            if not mech_attrs or type(mech_attrs) is not dict:
+            vendor_attrs = request.get_json()
+            if not vendor_attrs or type(vendor_attrs) is not dict:
                 abort(400, "Invalid input")
-            if mech_attrs.get("first_name") is None or \
-                mech_attrs.get("last_name") is None or \
-                    mech_attrs.get("email") is None or \
-                        mech_attrs.get("password") is None:
+            if vendor_attrs.get("first_name") is None or \
+                vendor_attrs.get("last_name") is None or \
+                    vendor_attrs.get("email") is None or \
+                        vendor_attrs.get("password") is None:
                 abort(400, "Incomplete information")
-            mech_obj = Mechanic(**mech_attrs)
-            mech_obj.save()
-            return jsonify(mech_obj.to_dict()), 201
+            vendor_obj = Vendor(**vendor_attrs)
+            vendor_obj.save()
+            return jsonify(vendor_obj.to_dict()), 201
     
-    if mechanic_id:
-        mech_obj = storage.get(Mechanic, mechanic_id)
-        if not mech_obj:
-            abort(404, "Mechanic not found")
+    if vendor_id:
+        vendor_obj = storage.get(Vendor, vendor_id)
+        if not vendor_obj:
+            abort(404, "Vendor not found")
         if request.method == "GET":
-            return jsonify(mech_obj.to_dict()), 200
+            return jsonify(vendor_obj.to_dict()), 200
         if request.method == "PUT":
-            mech_attributes = request.get_json()
-            if not mech_attributes or type(mech_attributes) is not dict:
+            vendor_attributes = request.get_json()
+            if not vendor_attributes or type(vendor_attributes) is not dict:
                 abort(400, "Invalid input")
-            for k, v in mech_attributes.items():
-                setattr(mech_obj, k, v)
-            mech_obj.save()
-            return jsonify(mech_obj.to_dict()), 201
+            for k, v in vendor_attributes.items():
+                setattr(vendor_obj, k, v)
+            vendor_obj.save()
+            return jsonify(vendor_obj.to_dict()), 201
         if request.method == "DELETE":
-            mech_obj.delete()
+            vendor_obj.delete()
             storage.save()
             return jsonify({}), 200
         
-@app_views.route("/mechanics/<mechanic_id>/reviews", \
+@app_views.route("/vendors/<vendor_id>/reviews", \
                  methods=["GET", "POST"], strict_slashes=False)
-@app_views.route("/mechanics/<mechanic_id>/reviews/<review_id>", \
+@app_views.route("/vendors/<vendor_id>/reviews/<review_id>", \
                  methods=["GET", "PUT", "DELETE"], strict_slashes=False)
-def mech_reviews(mechanic_id=None, review_id=None):
-    if not mechanic_id:
+def vendor_reviews(vendor_id=None, review_id=None):
+    if not vendor_id:
         abort(400)
-    mech_obj = storage.get(Mechanic, mechanic_id)
-    if not mech_obj:
+    vendor_obj = storage.get(Vendor, vendor_id)
+    if not vendor_obj:
         abort(404)
     if not review_id:
         if request.method == "GET":
             #all_reviews = storage.all(Review).values()
-            mech_reviews = [one_review.to_dict() for one_review in \
-                            mech_obj.reviews]
-            return jsonify(mech_reviews), 200
+            vendor_reviews = [one_review.to_dict() for one_review in \
+                            vendor_obj.reviews]
+            return jsonify(vendor_reviews), 200
         if request.method == "POST":
             review_dict = request.get_json()
             if not review_dict or type(review_dict) is not dict:
@@ -77,7 +77,7 @@ def mech_reviews(mechanic_id=None, review_id=None):
                 or review_dict.get("description") is None \
                     or review_dict.get("rating") is None:
                 abort(400, "Incomplete information")
-            review_dict["mechanic_id"] = mechanic_id
+            review_dict["vendor_id"] = vendor_id
             review_obj = Review(**review_dict)
             review_obj.save()
             return jsonify(review_obj.to_dict()), 201

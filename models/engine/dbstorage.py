@@ -96,4 +96,3 @@ class DBStorage:
         total items in db if no class is passed"""
         obj_dict = self.all(cls)
         return len(obj_dict)
-    

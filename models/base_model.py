@@ -62,3 +62,10 @@ class BaseModel():
     def delete(self):
         """Delete the object from the database"""
         models.storage.delete(self)
+        models.storage.save()
+
+    def update(self, attr, value):
+        """Update the object attributes"""
+        if attr in self.__dict__.keys() and attr != "id":
+            setattr(self, attr, value)
+        models.storage.save()
