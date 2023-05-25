@@ -39,7 +39,7 @@ class DBStorage:
         Session = scoped_session(session)
         self.__session = Session
 
-    
+
     def new(self, obj):
         """Create a new object"""
         self.__session.add(obj)
@@ -76,7 +76,7 @@ class DBStorage:
                 key = obj.__class__.__name__ + "." + obj.id
                 new_dict[key] = obj
         return new_dict
-    
+
     def get(self, cls, id):
         """method to retrieve one object"""
         objs = self.all(cls).values()
@@ -84,13 +84,13 @@ class DBStorage:
             if obj.id == id:
                 return obj
         return None
-    
+
     def find(self, cls=None, attr=None, val=None):
         """Return an instance for a db entry"""
         if cls in classes:
             obj = self.__session.query(cls).filter(getattr(cls, attr) == val).first()
         return obj
-    
+
     def count(self, cls=None):
         """return count of the class passed
         total items in db if no class is passed"""

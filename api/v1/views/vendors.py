@@ -8,6 +8,7 @@ from api.v1.views import app_views
 from flask import jsonify, request, abort
 from models.vendor import Vendor
 from models.review import Review
+from models.part import Part
 from models import storage
 
 
@@ -93,10 +94,59 @@ def vendor_reviews(vendor_id=None, review_id=None):
             if not review_attr or type(review_attr) is not dict:
                 abort(400, "Invalid input")
             for key, value in review_attr.items():
-                setattr(review_obj, key, value)
+                if key not in ["id", "created_at", "updated_at"]:
+                    setattr(review_obj, key, value)
             review_obj.save()
             return jsonify(review_obj.to_dict()), 201
         if request.method == "DELETE":
             review_obj.delete()
+            storage.save()
+            return jsonify({}), 200
+        
+@app_views.route("/vendors/<vendor_id>/parts", \
+                 methods=["GET", "POST"], strict_slashes=False)
+@app_views.route("/vendors/<vendor_id>/parts/<part_id>", \
+                 methods=["GET", "PUT", "DELETE"], strict_slashes=False)
+def vendor_parts(vendor_id=None, part_id=None):
+    if not vendor_id:
+        abort(400)
+    vendor_obj = storage.get(Vendor, vendor_id)
+    if not vendor_obj:
+        abort(404)
+    if not part_id:
+        if request.method == "GET":
+            #all_reviews = storage.all(Review).values()
+            vendor_parts = [one_part.to_dict() for one_part in \
+                            vendor_obj.parts]
+            return jsonify(vendor_parts), 200
+        if request.method == "POST":
+            part_dict = request.get_json()
+            if not part_dict or type(part_dict) is not dict:
+                abort(400, "Invalid input")
+            if part_dict.get("part_name") is None \
+                or part_dict.get("part_price") is None:
+                abort(400, "Incomplete information")
+            part_dict["vendor_id"] = vendor_id
+            part_obj = Part(**part_dict)
+            part_obj.save()
+            return jsonify(part_obj.to_dict()), 201
+        
+    if part_id:
+        part_obj = storage.get(Part, part_id)
+        if not part_obj:
+            abort(404)
+        if request.method == "GET":
+            return jsonify(part_obj.to_dict()), 200
+        if request.method == "PUT":
+            part_attr = request.get_json()
+            if not part_attr or type(part_attr) is not dict:
+                abort(400, "Invalid input")
+            for key, value in part_attr.items():
+                if key not in ["id", "created_at", "updated_at"]:
+                    setattr(part_obj, key, value)
+            part_obj.save()
+            return jsonify(part_obj.to_dict()), 201
+        if request.method == "DELETE":
+            part_obj.delete()
             storage.save()
             return jsonify({}), 200
