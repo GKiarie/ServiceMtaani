@@ -64,7 +64,30 @@ def get_all_clients(client_id=None):
 def get_client_jobs(client_id=None):
     "get all jobs posted by client"
 
-    if client_id:
-        client_jobs_obj = storage.get(Client, client_id)
-        client_jobs_list = [client_job.to_dict() for client_job in client_jobs_obj.jobs]
-        return jsonify(client_jobs_list), 200
+    if not client_id:
+        abort(400, "Path not recognized")
+
+    client_obj = storage.get(Client, client_id)
+
+    if not client_obj:
+        abort(404, "Not Found")
+    else:
+        client_jobs = [client_job.to_dict() for client_job in client_obj.jobs]
+        return jsonify(client_jobs), 200
+
+
+@app_views.route("/clients/<client_id>/orders", strict_slashes=False)
+def get_client_orders(client_id=None):
+    """get all orders posted by a client"""
+
+    if not client_id:
+        abort(400, "Path not Recognized")
+
+    client_obj = storage.get(Client, client_id)
+
+    if not client_obj:
+        abort(404, "Not Found")
+
+    else:
+        client_orders = [client_order.to_dict() for client_order in client_obj.orders]
+        return jsonify(client_orders), 200
