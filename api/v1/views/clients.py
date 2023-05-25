@@ -5,6 +5,7 @@
 from api.v1.views import app_views
 from models import storage
 from models.client import Client
+from models.job import Job
 from flask import request, jsonify, abort
 
 @app_views.route("/clients", methods=["GET", "POST"],strict_slashes=False)
@@ -57,3 +58,13 @@ def get_all_clients(client_id=None):
             storage.delete(client_obj)
             storage.save()
             return jsonify({}), 200
+
+
+@app_views.route("/clients/<client_id>/jobs", strict_slashes=False)
+def get_client_jobs(client_id=None):
+    "get all jobs posted by client"
+
+    if client_id:
+        client_jobs_obj = storage.get(Client, client_id)
+        client_jobs_list = [client_job.to_dict() for client_job in client_jobs_obj.jobs]
+        return jsonify(client_jobs_list), 200
