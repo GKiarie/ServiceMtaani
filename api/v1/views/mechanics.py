@@ -80,23 +80,23 @@ def mech_reviews(mechanic_id=None, review_id=None):
             review_dict["mechanic_id"] = mechanic_id
             review_obj = Review(**review_dict)
             review_obj.save()
-            return jsonify(review_obj.to_dict()), 200
+            return jsonify(review_obj.to_dict()), 201
         
-        if review_id:
-            review_obj = storage.get(Review, review_id)
-            if not review_obj:
-                abort(404)
-            if request.method == "GET":
-                return jsonify(review_obj.to_dict()), 200
-            if request.method == "PUT":
-                review_attr = request.get_json()
-                if not review_attr or type(review_attr) is not dict:
-                    abort(400, "Invalid input")
-                for key, value in review_attr.items():
-                    setattr(review_obj, key, value)
-                review_obj.save()
-                return jsonify(review_obj.to_dict()), 201
-            if request.method == "DELETE":
-                review_obj.delete()
-                storage.save()
-                return jsonify({}), 200
+    if review_id:
+        review_obj = storage.get(Review, review_id)
+        if not review_obj:
+            abort(404)
+        if request.method == "GET":
+            return jsonify(review_obj.to_dict()), 200
+        if request.method == "PUT":
+            review_attr = request.get_json()
+            if not review_attr or type(review_attr) is not dict:
+                abort(400, "Invalid input")
+            for key, value in review_attr.items():
+                setattr(review_obj, key, value)
+            review_obj.save()
+            return jsonify(review_obj.to_dict()), 201
+        if request.method == "DELETE":
+            review_obj.delete()
+            storage.save()
+            return jsonify({}), 200
