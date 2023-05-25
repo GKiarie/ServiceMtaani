@@ -21,7 +21,7 @@ def get_all_clients(client_id=None):
         elif request.method == "POST":
             my_dict = request.get_json()
             if not my_dict:
-                abort(400, "JSON missing")
+                abort(400, "Invalid Input")
             if my_dict.get("first_name") is None or \
                 my_dict.get("last_name") is None or \
                 my_dict.get("phone_number") is None or \
