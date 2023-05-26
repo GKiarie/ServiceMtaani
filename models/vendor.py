@@ -11,7 +11,7 @@ class Vendor(BaseModel, Base):
     __tablename__ = "vendors"
     first_name = Column(String(60), nullable=False)
     last_name = Column(String(60), nullable=False)
-    email = Column(String(60), nullable=False)
+    email = Column(String(60), nullable=False, unique=True)
     phone_number = Column(Integer, nullable=False)
     business_name = Column(String(100), nullable=False)
     orders_completed = Column(Integer, default=0, nullable=False)

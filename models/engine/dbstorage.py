@@ -13,6 +13,7 @@ from models.vehicle import Vehicle
 from models.vendor import Vendor
 from models.image import Image
 from sqlalchemy import create_engine as ce
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker, scoped_session
 from os import getenv
 
@@ -29,8 +30,8 @@ class DBStorage:
         pwd = getenv("MYSQL_PWD")
         host = getenv("MYSQL_HOST")
         dtbs = getenv("MYSQL_DTBS")
-        # self.__engine = ce('mysql+mysqldb://{}:{}@{}/{}'.format(user, pwd, host, dtbs), pool_pre_ping=True)
-        self.__engine = ce('mysql+mysqldb://admin:admin2023@localhost/service_mtaani', pool_pre_ping=True)
+        self.__engine = ce('mysql+mysqldb://{}:{}@{}/{}'.format(user, pwd, host, dtbs), pool_pre_ping=True)
+        # self.__engine = ce('mysql+mysqldb://admin:admin2023@localhost/service_mtaani', pool_pre_ping=True)
 
     def reload(self):
         """Reload data in the db"""
@@ -48,8 +49,8 @@ class DBStorage:
         """Commit the session to the db"""
         try:
             self.__session.commit()
-        except Exception as error:
-            print(error)
+        except Exception:
+            print("Error creating DB Entry")
             self.__session.rollback()
 
     def delete(self, obj=None):
