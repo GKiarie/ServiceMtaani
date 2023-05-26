@@ -11,7 +11,9 @@ from flask import abort, request, jsonify
                  methods=["GET", "POST"])
 def get_bids_job_id(job_id):
     job_objs = storage.all(Job).values()
-    job_exists = False
+    job_obj = storage.get(Job, job_id)    
+    if job_obj is None:
+        abort(404, "Invalid jobid")
     for job_obj in job_objs:
         if job_obj.id == job_id:
             job_exists = True
