@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from models.base_model import BaseModel
 from models.client import Client
 from models.mechanic import Mechanic
 from models.vendor import Vendor
@@ -14,9 +13,32 @@ from models.vehicle import Vehicle
 from models import storage
 
 if __name__ == "__main__":
-    client1 = Client(first_name="first", last_name="last", email="firstlast@email.com", password="pwd2023", phone_number=84823)
+    client1 = Client(first_name="Monty", last_name="Python", \
+                     email="montypythonvonrossum@gmail.com", password="pwd2023", \
+                        phone_number=84823)
     client1.save()
-    mech1 = Mechanic(first_name="Jake", last_name="Kim", email="jakekim@email.com", phone_number=789097789, business_name="Jake Garage",  jobs_completed=2, rating=2)
+    mech1 = Mechanic(first_name="Jake", last_name="Kim", \
+                     email="jakekimgarage@email.com", phone_number=789097789, \
+                        business_name="Jake Garage",  jobs_completed=2, \
+                            rating=2)
     mech1.save()
+    vendor1 = Vendor(first_name="Jon", last_name="Snow", email="jonsnowresurrected@gmail.com", \
+                     phone_number=722663664, business_name="Jon Recovery")
+    vendor1.save()
+    vehicle1 = Vehicle(client_id=client1.id, make="Toyota", model="Camry", \
+                       body_type="Sedan", year_of_manufacture="2012")
+    vehicle1.save()
+    job1 = Job(client_id=client1.id, job_title="Carwash")
+    job1.save()
+    bid1 = Bid(mechanic_id=mech1.id, job_id=job1.id, bid_amount=200)
+    bid1.save()
+    part1 = Part(vendor_id=vendor1.id, part_name="Headlights", part_price=20000)
+    part1.save()
+    image1 = Image(part_id=part1.id, image_path="/Downloads/headlights.png")
+    image1.save()
     rev1 = Review(client_id=client1.id, mechanic_id=mech1.id, description="Good guy", rating=5)
     rev1.save()
+    order1 = Order(client_id=client1.id)
+    order1.save()
+    order1.parts.append(part1)
+    order1.save()

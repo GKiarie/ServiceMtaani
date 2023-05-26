@@ -46,7 +46,7 @@ def get_parts(part_id=None):
 @app_views.route('/parts/<part_id>/images/<image_id>', methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def parts_images(part_id=None, image_id=None):
     # all_images = storage.all(Image)
-    part_obj = storage.get(part_id)
+    part_obj = storage.get(Part, part_id)
     if not image_id:
         if request.method == "GET":
             image_list = [image.to_dict() for image in part_obj.images]
@@ -87,7 +87,7 @@ def parts_orders(part_id):
         abort(404)
     if request.method == "GET":
         order_list = [order.to_dict() for order in part_obj.orders]
-        return jsonify(order_list.to_dict()), 200
+        return jsonify(order_list), 200
     
 @app_views.route('/parts/<part_id>/purchases', strict_slashes=False)
 def parts_purchases(part_id):
@@ -96,5 +96,5 @@ def parts_purchases(part_id):
         abort(404)
     order_list = [order.to_dict() for order in part_obj.orders]
     len_order_list = len(order_list)
-    purchases = f"Orders with {part_obj.name}: {len_order_list}"
+    purchases = f"Orders with {part_obj.part_name}: {len_order_list}"
     return jsonify(purchases), 200

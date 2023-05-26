@@ -11,10 +11,10 @@ class Mechanic(BaseModel, Base):
     __tablename__ = "mechanics"
     first_name = Column(String(60), nullable=False)
     last_name = Column(String(60), nullable=False)
-    email = Column(String(60), nullable=False)
+    email = Column(String(60), nullable=False, unique=True)
     phone_number = Column(Integer, nullable=False)
     business_name = Column(String(60))
-    jobs_compeleted = Column(Integer, nullable=False, default=0)
+    jobs_completed = Column(Integer, nullable=False, default=0)
     rating = Column(Integer, nullable=False, default=0)
     specialization = Column(String(60))
     bids = relationship("Bid", backref="mechanic", cascade="all, delete, delete-orphan")

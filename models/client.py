@@ -10,7 +10,7 @@ class Client(BaseModel, Base):
     __tablename__ = 'clients'
     first_name = Column(String(50), nullable=False)
     last_name = Column(String(50), nullable=False)
-    email = Column(String(100), nullable=False)
+    email = Column(String(100), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
     phone_number = Column(Integer, nullable=False, default=0)
     vehicles = relationship("Vehicle", backref="client", cascade="all, delete, delete-orphan")

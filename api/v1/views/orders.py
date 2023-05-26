@@ -8,7 +8,7 @@ from models import storage
 from flask import request, abort, jsonify
 
 @app_views.route('/orders', methods=["GET", "POST"], strict_slashes=False)
-@app_views.route('/parts/<order_id>', methods=["GET", "PUT", "DELETE"], strict_slashes=False)
+@app_views.route('/orders/<order_id>', methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def get_orders(order_id=None):
     all_orders = storage.all(Order)
     if not order_id:
