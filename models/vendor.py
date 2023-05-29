@@ -4,7 +4,7 @@ Class for vendors
 """
 
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, BigInteger
 from sqlalchemy.orm import relationship
 
 class Vendor(BaseModel, Base):
@@ -12,7 +12,9 @@ class Vendor(BaseModel, Base):
     first_name = Column(String(60), nullable=False)
     last_name = Column(String(60), nullable=False)
     email = Column(String(60), nullable=False, unique=True)
-    phone_number = Column(Integer, nullable=False)
+    password = Column(String(300), nullable=False)
+    # phone_number = Column(Integer, nullable=False)
+    phone_number = Column(BigInteger, nullable=False)
     business_name = Column(String(100), nullable=False)
     orders_completed = Column(Integer, default=0, nullable=False)
     rating = Column(Integer, default=0, nullable=False)

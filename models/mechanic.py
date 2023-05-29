@@ -13,6 +13,7 @@ class Mechanic(BaseModel, Base):
     last_name = Column(String(60), nullable=False)
     email = Column(String(60), nullable=False, unique=True)
     phone_number = Column(Integer, nullable=False)
+    password = Column(String(300), nullable=False)
     business_name = Column(String(60))
     jobs_completed = Column(Integer, nullable=False, default=0)
     rating = Column(Integer, nullable=False, default=0)

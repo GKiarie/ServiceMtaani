@@ -18,12 +18,12 @@ if __name__ == "__main__":
                         phone_number=84823)
     client1.save()
     mech1 = Mechanic(first_name="Jake", last_name="Kim", \
-                     email="jakekimgarage@email.com", phone_number=789097789, \
+                     email="jakekimgarage@email.com", password="fakepassword", phone_number=789097789, \
                         business_name="Jake Garage",  jobs_completed=2, \
                             rating=2)
     mech1.save()
     vendor1 = Vendor(first_name="Jon", last_name="Snow", email="jonsnowresurrected@gmail.com", \
-                     phone_number=722663664, business_name="Jon Recovery")
+                     phone_number=722663664, business_name="Jon Recovery", password="fakepassword")
     vendor1.save()
     vehicle1 = Vehicle(client_id=client1.id, make="Toyota", model="Camry", \
                        body_type="Sedan", year_of_manufacture="2012")

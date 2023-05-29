@@ -49,8 +49,11 @@ class DBStorage:
         """Commit the session to the db"""
         try:
             self.__session.commit()
-        except Exception:
+        except Exception as e:
             print("Error creating DB Entry")
+            print()
+            print(e)
+            print()
             self.__session.rollback()
 
     def delete(self, obj=None):
