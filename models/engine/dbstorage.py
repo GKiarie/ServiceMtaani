@@ -100,3 +100,8 @@ class DBStorage:
         total items in db if no class is passed"""
         obj_dict = self.all(cls)
         return len(obj_dict)
+    
+    def openjobs(self):
+        """Return a list of open jobs"""
+        jobs = self.__session.query(Job).filter(Job.status == True).all()
+        return jobs
