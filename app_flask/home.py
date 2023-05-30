@@ -29,8 +29,6 @@ def login(user=None):
     if request.method == "POST":
         data = request.form
         newdata = data.copy()
-        # hashed_pass = generate_password_hash(newdata["password"], method='sha256')
-        # newdata['password'] = hashed_pass
         if user == "vendor":
             user_obj = storage.find(Vendor, "email", newdata.get("email"))
             if not user_obj:
@@ -83,10 +81,6 @@ def vendor_signup(user=None):
                 del newdata["password2"]
                 user_obj = Vendor(**newdata)
                 user_obj.save()
-                # if storage.find(Vendor, 'id', vendor1.id):
-                #     flash('Account created successfully. Log in.', category='success')
-                #     # return render_template("signup.html")
-                #     # return redirect(url_for('app.vendor.login'))
                 return redirect('/login/vendor')
         if user == "client":
             if storage.find(Client, "email", newdata.get("email")):
@@ -97,10 +91,6 @@ def vendor_signup(user=None):
                 del newdata["password2"]
                 user_obj = Client(**newdata)
                 user_obj.save()
-                # if storage.find(Vendor, 'id', vendor1.id):
-                #     flash('Account created successfully. Log in.', category='success')
-                #     # return render_template("signup.html")
-                #     # return redirect(url_for('app.vendor.login'))
                 return redirect('/login/client')
 
         if user == "mechanic":
@@ -112,10 +102,6 @@ def vendor_signup(user=None):
                 del newdata["password2"]
                 user_obj = Mechanic(**newdata)
                 user_obj.save()
-                # if storage.find(Vendor, 'id', vendor1.id):
-                #     flash('Account created successfully. Log in.', category='success')
-                #     # return render_template("signup.html")
-                #     # return redirect(url_for('app.vendor.login'))
                 return redirect('/login/mechanic')
     return render_template("signup.html")
 
@@ -187,7 +173,6 @@ def mechanic_jobs():
         return render_template("mechanic_homepage.html", all_jobs=all_jobs)
     if request.method == "POST":
         # bid1 = Bid()
-        # flash()
         return render_template("mechanic_homepage.html", all_jobs=all_jobs)
     
 @app.route('/mechanic/place_bid', methods=['POST'], strict_slashes=False)
