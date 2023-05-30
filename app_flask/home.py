@@ -62,9 +62,7 @@ def login(user=None):
                 flash('Login Successful', category='success')
                 all_jobs = storage.openjobs()
                 login_user(user_obj, remember=True)
-                print(current_user.email)
-                # return render_template("mechanic_homepage.html", all_jobs=all_jobs, user_id=user_obj.id)
-                return redirect('/mechanic')
+                return redirect("/mechanic")
             else:
                 flash('Wrong password. Try again', category="error")        
         
@@ -192,22 +190,97 @@ def vendor_catalogue():
 @app.route('/mechanic/', methods=['GET', 'POST'], strict_slashes=False)
 def mechanic_jobs():
     """This route will render the mechanic home page"""
-    all_jobs = storage.openjobs()
+    # all_jobs = storage.openjobs()
+    # mech_obj = storage.get(Mechanic, current_user.id)
+    # for bid in mech_obj.bids:
+    #     if bid.job in all_jobs:
+    #         all_jobs.remove(bid.job)
+    # mech_bids = storage.get(Mechanic, current_user.id).bids
     if request.method == "GET":
         all_jobs = storage.openjobs()
+        mech_obj = storage.get(Mechanic, current_user.id)
+        for bid in mech_obj.bids:
+            if bid.job in all_jobs:
+                all_jobs.remove(bid.job)
         return render_template("mechanic_homepage.html", all_jobs=all_jobs, current_user=current_user)
     if request.method == "POST":
-        # bid1 = Bid()
-        return render_template("mechanic_homepage.html", all_jobs=all_jobs)
+        data = request.form
+        newdata = data.copy()
+        newdata['bid_amount'] = int(newdata['bid_amount'])
+        bid_obj = Bid(**newdata)
+        bid_obj.save()
+        all_jobs = storage.openjobs()
+        mech_obj = storage.get(Mechanic, current_user.id)
+        for bid in mech_obj.bids:
+            if bid.job in all_jobs:
+                all_jobs.remove(bid.job)
+        return render_template("mechanic_homepage.html", all_jobs=all_jobs, current_user=current_user)
     
-@app.route('/mechanic/place_bid', methods=['POST'], strict_slashes=False)
-def place_bid():
-    """Route to place bid"""
+@app.route('/mechanic/openbids', methods=['GET', 'POST'], strict_slashes=False)
+def mechanic_openbids():
+    """The route will show the open jobs"""
+    mech_obj = storage.get(Mechanic, current_user.id)
+    bids = mech_obj.bids
+    bids_dict = []
+    for bid in bids:
+        bid_dict = {}
+        job_obj = storage.get(Job, bid.job_id)
+        if job_obj.job_status == 1:
+            bid_dict['id'] = bid.id
+            bid_dict['bid_amount'] = bid.bid_amount
+            bid_dict['job_title'] = job_obj.job_title
+            bid_dict['job_description'] = job_obj.job_description
+            bids_dict.append(bid_dict)
+    if request.method == "GET":
+        return bids_dict
     if request.method == "POST":
         data = request.form
-        new_bid = Bid(**data)
-        new_bid.save()
-        return redirect('/mechanic')
+        newdata = data.copy()
+        newdata['bid_amount'] = int(newdata['bid_amount'])
+        bid_obj = storage.get(Bid, newdata['id'])
+        bid_obj.bid_amount = newdata['bid_amount']
+        bid_obj.save()
+        return bids_dict
+    
+@app.route('/mechanic/activejos', strict_slashes=False)
+def active_jobs():
+    mech_obj = storage.get(Mechanic, current_user.id)
+    bids = mech_obj.bids
+    bids_dict = []
+    for bid in bids:
+        if bid.bid_status == 1:
+            job_obj = storage.get(Job, bid.job_id)
+            if job_obj.job_status != 0:
+                bid_dict = {}
+                bid_dict['id'] = bid.id
+                bid_dict['bid_amount'] = bid.bid_amount
+                bid_dict['job_title'] = job_obj.job_title
+                bid_dict['job_description'] = job_obj.job_description
+                bids_dict.append(bid_dict)
+    return bids_dict
+
+@app.route('/mechanic/completedjobs', strict_slashes=False)
+def completed_jobs():
+    mech_obj = storage.get(Mechanic, current_user.id)
+    bids = mech_obj.bids
+    bids_dict = []
+    for bid in bids:
+        if bid.bid_status == 1:
+            job_obj = storage.get(Job, bid.job_id)
+            if job_obj.job_status == 0:
+                bid_dict = {}
+                bid_dict['id'] = bid.id
+                bid_dict['bid_amount'] = bid.bid_amount
+                bid_dict['job_title'] = job_obj.job_title
+                bid_dict['job_description'] = job_obj.job_description
+                bids_dict.append(bid_dict)
+    return bids_dict
+
+@app.route('/mechanic/reviews', strict_slashes=False)
+def mechanic_reviews():
+    mech_obj = storage.get(Mechanic, current_user.id)
+    reviews = mech_obj.reviews
+    return reviews
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

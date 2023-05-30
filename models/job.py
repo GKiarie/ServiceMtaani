@@ -4,7 +4,7 @@ Jobs class
 """
 
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey, Boolean
+from sqlalchemy import Column, String, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
 class Job(BaseModel, Base):
@@ -13,7 +13,7 @@ class Job(BaseModel, Base):
     client_id = Column(String(60), ForeignKey('clients.id'), nullable=False)
     job_title = Column(String(200), nullable=False)
     job_description = Column(String(500))
-    status = Column(Boolean, default=True)
+    job_status = Column(Integer, default=1)
     bids = relationship("Bid", backref="job", cascade="all, delete, delete-orphan")
 
     def __init__(self, **kwargs):

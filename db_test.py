@@ -28,7 +28,7 @@ if __name__ == "__main__":
     vehicle1 = Vehicle(client_id=client1.id, make="Toyota", model="Camry", \
                        body_type="Sedan", year_of_manufacture="2012")
     vehicle1.save()
-    job1 = Job(client_id=client1.id, job_title="Carwash")
+    job1 = Job(client_id=client1.id, job_title="Carwash", job_description="Major carwash. Car very dirty")
     job1.save()
     bid1 = Bid(mechanic_id=mech1.id, job_id=job1.id, bid_amount=200)
     bid1.save()
