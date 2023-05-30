@@ -133,61 +133,49 @@ def test_route():
     return render_template("test_route.html")
 
 @app.route('/vendor', strict_slashes=False)
+@login_required
 def vendor_orders_route():
     """Use this route to render vendor orders"""
-    items = [
-    {
-        'order_name': 'Order 1',
-        'client_name': 'Foo',
-        'client_phone': '1234567890',
-        'parts': 'Tyres, Headlights'
-    },
-    {
-        'order_name': 'Order 2',
-        'client_name': 'Bar',
-        'client_phone': '9876543210',
-        'parts': 'Headlights'
-    }
-    ]
-    return render_template("vendor_orders.html", items=items, current_user=current_user)
+    vendor_obj = storage.get(Vendor, current_user.id)
+    order_list = []
+    for part in vendor_obj.parts:
+        for order in part.orders:
+            if order.status == True:
+                order_info = {}
+                order_info['part_name'] = part.part_name
+                order_info['client_first_name'] = storage.get(Client, order.client_id).first_name
+                order_info['client_last_name'] = storage.get(Client, order.client_id).last_name
+                order_info['client_phone_number'] = storage.get(Client, order.client_id).phone_number
+                order_list.append(order_info)
+    return render_template("vendor_orders.html", orders=order_list, current_user=current_user)
 
 @app.route('/vendor/delivered', strict_slashes=False)
 @login_required
 def vendor_delivered():
     """Use this route to render the vendor's delivered orders"""
-    items = [
-    {
-        'order_name': 'Order 1',
-        'client_name': 'Foo',
-        'client_phone': '1234567890',
-        'parts': 'Tyres, Headlights'
-    },
-    {
-        'order_name': 'Order 2',
-        'client_name': 'Bar',
-        'client_phone': '9876543210',
-        'parts': 'Headlights'
-    }
-    ]
-    return render_template("vendor_delivered.html", items=items)
+    vendor_obj = storage.get(Vendor, current_user.id)
+    order_list = []
+    for part in vendor_obj.parts:
+        for order in part.orders:
+            if order.status == False:
+                order_info = {}
+                order_info['part_name'] = part.part_name
+                order_info['client_first_name'] = storage.get(Client, order.client_id).first_name
+                order_info['client_last_name'] = storage.get(Client, order.client_id).last_name
+                order_info['client_phone_number'] = storage.get(Client, order.client_id).phone_number
+                order_list.append(order_info)
+    return render_template("vendor_delivered.html", orders=order_list, current_user=current_user)
+
 
 @app.route('/vendor/catalogue', strict_slashes=False)
+@login_required
 def vendor_catalogue():
     """This route will return the vendor's catalogue"""
-    items = [
-    {
-        'part_name': 'Headlights',
-        'part_description': 'Very bright',
-        'part_price': 20000
-    },
-    {
-        'part_name': 'Tyres',
-        'part_price': 20000
-    }
-    ]
-    return render_template("vendor_catalogue.html", items=items)
+    vendor_obj = storage.get(Vendor, current_user.id)
+    return render_template("vendor_catalogue.html", items=vendor_obj.parts, current_user=current_user)
 
 @app.route('/mechanic/', methods=['GET', 'POST'], strict_slashes=False)
+@login_required
 def mechanic_jobs():
     """This route will render the mechanic home page"""
     # all_jobs = storage.openjobs()
@@ -217,6 +205,7 @@ def mechanic_jobs():
         return render_template("mechanic_homepage.html", all_jobs=all_jobs, current_user=current_user)
     
 @app.route('/mechanic/openbids', methods=['GET', 'POST'], strict_slashes=False)
+@login_required
 def mechanic_openbids():
     """The route will show the open jobs"""
     mech_obj = storage.get(Mechanic, current_user.id)
@@ -243,6 +232,7 @@ def mechanic_openbids():
         return bids_dict
     
 @app.route('/mechanic/activejos', strict_slashes=False)
+@login_required
 def active_jobs():
     mech_obj = storage.get(Mechanic, current_user.id)
     bids = mech_obj.bids
@@ -260,6 +250,7 @@ def active_jobs():
     return bids_dict
 
 @app.route('/mechanic/completedjobs', strict_slashes=False)
+@login_required
 def completed_jobs():
     mech_obj = storage.get(Mechanic, current_user.id)
     bids = mech_obj.bids
@@ -277,6 +268,7 @@ def completed_jobs():
     return bids_dict
 
 @app.route('/mechanic/reviews', strict_slashes=False)
+@login_required
 def mechanic_reviews():
     mech_obj = storage.get(Mechanic, current_user.id)
     reviews = mech_obj.reviews
