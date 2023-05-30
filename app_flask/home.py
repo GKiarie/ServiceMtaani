@@ -11,17 +11,31 @@ from models.bid import Bid
 from models.mechanic import Mechanic
 from models.client import Client
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
+from flask_login import LoginManager, login_user, current_user, login_required, logout_user
+
+login_manager = LoginManager()
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
-app.config.update(SECRET_KEY='osd(99092=36&462134kjKDhuIS_d23')
+login_manager.login_view = 'homepage'
+login_manager.init_app(app)
+# app.config.update(SECRET_KEY='osd(99092=36&462134kjKDhuIS_d23')
 
-
+@login_manager.user_loader
+def load_user(id):
+    if storage.find(Mechanic, "id", id):
+        return storage.find(Mechanic, "id", id)
+    elif storage.find(Vendor, "id", id):
+        return storage.find(Vendor, "id", id)
+    elif storage.find(Client, "id", id):
+        return storage.find(Client, "id", id)
 
 @app.route('/', strict_slashes=False)
 def homepage():
     """Render the homepage"""
-    return render_template("home.html")
+    return render_template("index.html")
 
 @app.route('/login/<user>', methods=["GET", "POST"], strict_slashes=False)
 def login(user=None):
@@ -37,7 +51,8 @@ def login(user=None):
                 flash("No user found with provided email.", category='error')
             elif user_obj and check_password_hash(user_obj.password, newdata.get("password")):
                 flash('Login Successful', category='success')
-                return render_template("vendor_orders.html")
+                login_user(user_obj, remember=True)
+                return redirect("/vendor")
             else:
                 flash('Wrong password. Try again', category="error")
 
@@ -48,9 +63,12 @@ def login(user=None):
             elif user_obj and check_password_hash(user_obj.password, newdata.get("password")):
                 flash('Login Successful', category='success')
                 all_jobs = storage.openjobs()
-                return render_template("mechanic_homepage.html", all_jobs=all_jobs, user_id=user_obj.id)
+                login_user(user_obj, remember=True)
+                print(current_user.email)
+                # return render_template("mechanic_homepage.html", all_jobs=all_jobs, user_id=user_obj.id)
+                return redirect('/mechanic')
             else:
-                flash('Wrong password. Try again', category="error")
+                flash('Wrong password. Try again', category="error")        
         
         if user == "client":
             user_obj = storage.find(Client, "email", newdata.get("email"))
@@ -58,8 +76,8 @@ def login(user=None):
                 flash("No user found with provided email.", category='error')
             elif user_obj and check_password_hash(user_obj.password, newdata.get("password")):
                 flash('Login Successful', category='success')
-                all_jobs = storage.openjobs()
-                return render_template("client_homepage.html", all_jobs=all_jobs)
+                login_user(user_obj, remember=True)
+                return redirect("/client")
             else:
                 flash('Wrong password. Try again', category="error")
     return render_template("login.html")
@@ -119,12 +137,18 @@ def vendor_signup(user=None):
                 return redirect('/login/mechanic')
     return render_template("signup.html")
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
+
 @app.route('/test', strict_slashes=False)
 def test_route():
     """Use this route to test new pages before integrating them"""
     return render_template("test_route.html")
 
-@app.route('/vendor/orders', strict_slashes=False)
+@app.route('/vendor', strict_slashes=False)
 def vendor_orders_route():
     """Use this route to render vendor orders"""
     items = [
@@ -141,9 +165,10 @@ def vendor_orders_route():
         'parts': 'Headlights'
     }
     ]
-    return render_template("vendor_orders.html", items=items)
+    return render_template("vendor_orders.html", items=items, current_user=current_user)
 
 @app.route('/vendor/delivered', strict_slashes=False)
+@login_required
 def vendor_delivered():
     """Use this route to render the vendor's delivered orders"""
     items = [
@@ -184,7 +209,7 @@ def mechanic_jobs():
     all_jobs = storage.openjobs()
     if request.method == "GET":
         all_jobs = storage.openjobs()
-        return render_template("mechanic_homepage.html", all_jobs=all_jobs)
+        return render_template("mechanic_homepage.html", all_jobs=all_jobs, current_user=current_user)
     if request.method == "POST":
         # bid1 = Bid()
         # flash()
