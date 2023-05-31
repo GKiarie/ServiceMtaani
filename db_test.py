@@ -14,21 +14,21 @@ from models import storage
 
 if __name__ == "__main__":
     client1 = Client(first_name="Monty", last_name="Python", \
-                     email="montypythonvonrossum@gmail.com", password="pwd2023", \
-                        phone_number=84823)
+                     email="montypython@gmail.com", password="pwd2023", \
+                        phone_number="0743284823")
     client1.save()
     mech1 = Mechanic(first_name="Jake", last_name="Kim", \
-                     email="jakekimgarage@email.com", password="fakepassword", phone_number=789097789, \
-                        business_name="Jake Garage",  jobs_completed=2, \
-                            rating=2)
+                     email="jakekim@email.com", password="fakepassword", phone_number="0789097789", \
+                        business_name="Jake Garage",  jobs_completed=0, \
+                            rating=0)
     mech1.save()
-    vendor1 = Vendor(first_name="Jon", last_name="Snow", email="jonsnowresurrected@gmail.com", \
-                     phone_number=722663664, business_name="Jon Recovery", password="fakepassword")
+    vendor1 = Vendor(first_name="Jon", last_name="Snow", email="jonsnow@gmail.com", \
+                     phone_number="0722663664", business_name="Jon Recovery", password="fakepassword")
     vendor1.save()
     vehicle1 = Vehicle(client_id=client1.id, make="Toyota", model="Camry", \
                        body_type="Sedan", year_of_manufacture="2012")
     vehicle1.save()
-    job1 = Job(client_id=client1.id, job_title="Carwash")
+    job1 = Job(client_id=client1.id, job_title="Carwash", job_description="Major carwash. Car very dirty")
     job1.save()
     bid1 = Bid(mechanic_id=mech1.id, job_id=job1.id, bid_amount=200)
     bid1.save()

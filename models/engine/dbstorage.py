@@ -103,5 +103,5 @@ class DBStorage:
 
     def openjobs(self):
         """Return a list of open jobs"""
-        jobs = self.__session.query(Job).filter(Job.status == True).all()
+        jobs = self.__session.query(Job).filter(Job.job_status == 1).all()
         return jobs

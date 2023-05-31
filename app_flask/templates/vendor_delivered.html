@@ -14,7 +14,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
         <div class="container">
           <a class="navbar-brand" href="#">
-            <img src="https://github.com/GKiarie/ServiceMtaani/blob/main/static/images/logo.png?raw=true" alt="" width="43" height="24" class="d-inline-block align-text-top">
+            <img src="../static/images/logo.png" alt="" width="43" height="24" class="d-inline-block align-text-top">
             Service Mtaani
         </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,15 @@
               <li class="nav-item">
                 <a class="nav-link" href="#">Contact</a>
               </li>
+              {% if current_user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="/logout">Log out</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="/">Log In</a>
+              </li>
+              {% endif %}
             </ul>
             <!-- <form class="d-flex">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -42,7 +51,7 @@
     <div class="row row-cols-auto justify-content-around">
         <div class="col-md-4">
             <div class="text-center text-white p-3 mb-3">
-                <a href="/vendor/orders" class="btn btn-outline-secondary text-dark" role="button">Orders</a>
+                <a href="/vendor/" class="btn btn-outline-secondary text-dark" role="button">Orders</a>
             </div>
         </div>
         <div class="col-md-4">
@@ -66,17 +75,17 @@
     </div>
     <div class="container">
     <div class="accordion" id="accordionExample">
-    {% for item in items %}
+    {% for order in orders %}
     <div class="accordion-item">
         <h2 class="accordion-header" id="heading{{ loop.index }}">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
-            Open Order #{{ loop.index }}
+            Delivered Order #{{ loop.index }}
           </button>
         </h2>
         <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             <strong>Order Information</strong><br>
-            Client Name: {{ item.client_name }} <br>Client Phone Number: {{ item.client_phone }} <br>Parts: {{ item.parts}} <br>
+            Client First Name: {{ order.client_first_name }} <br>Client Last Name: {{ order.client_last_name }} <br>Client Phone Number: {{ order.client_phone_number }} <br>Parts: {{ order.part_name }} <br><br>
           </div>
         </div>
       </div>
