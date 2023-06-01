@@ -3,41 +3,61 @@
 {% block content %}
 <div class="container">
     <div class="container row">
-    <button type="button" class="btn btn-secondary btn-lg col btn-space">Request a Service</button>
-    <button type="button" class="btn btn-secondary btn-lg col btn-space">Active Jobs</button>
-    <button type="button" class="btn btn-secondary btn-lg col btn-space">Completed Jobs</button>
-    <button type="button" class="btn btn-secondary btn-lg col btn-space">My Cart</button>
+    <button type="button" class="btn btn-primary btn-lg col  mr-2">Open Jobs</button>
+    <button type="button" class="btn btn-secondary btn-lg col  mr-2">Active Jobs</button>
+    <button type="button" class="btn btn-secondary btn-lg col  mr-2">Completed Jobs</button>
+    <button type="button" class="btn btn-secondary btn-lg col  mr-2">Request a Service</button>
+    <button type="button" class="btn btn-secondary btn-lg col ">My Cart</button>
     </div>
 
-    <!-- My jobs tiles -->
-    <div class="container job-tile">
-        <!-- Example row of columns -->
-        <div class="row">
-          <div class="col-md-4">
-            <h2>Car Wash</h2>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officia libero eius ullam cumque laborum cupiditate dignissimos aspernatur tempore, eveniet at in incidunt, nulla necessitatibus quas voluptas! Amet debitis temporibus nemo hic dicta nobis quos. Veritatis nostrum ducimus et dolores quas, fuga nemo nobis ab molestias nihil sequi atque praesentium suscipit?</p>
-            <p>
-                <a class="btn btn-secondary" href="#" role="button">Kshs. 2000</a>
-                <a class="btn btn-secondary" href="#" role="button">Accept Bid</a>
-            </p>
-          </div>
-          <div class="col-md-4">
-            <h2>Minor Service</h2>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt at error voluptatum consectetur. Molestiae ducimus reiciendis incidunt, reprehenderit hic doloribus sed, ea quod quidem, magni nemo provident animi inventore magnam aliquam. Fuga obcaecati soluta voluptatibus est reprehenderit neque inventore. Eum.</p>
-            <p>
-                <a class="btn btn-secondary" href="#" role="button">Kshs. 2000</a>
-                <a class="btn btn-secondary" href="#" role="button">Accept Bid</a>
-            </p>
-          </div>
-          <div class="col-md-4">
-            <h2>Engine Overhaul</h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Modi eligendi alias maxime earum autem molestiae! Eius, laudantium repudiandae enim quas ex nemo laboriosam dolor sequi culpa officiis repellendus? Doloribus quibusdam tempore porro earum vel nisi.</p>
-            <p>
-                <a class="btn btn-secondary" href="#" role="button">Kshs. 2000</a>
-                <a class="btn btn-secondary" href="#" role="button">Accept Bid</a>
-            </p>
+    <div class="container">
+        <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+        </div>
+        </div>
+        <div class="container">
+        <div class="accordion" id="accordionExample">
+            {% for job in jobs.values() %}
+
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Job #{{loop.index}} - {{job[0].job_title}}
+                    </button>
+                  </h2>
+                </div>
+
+
+                {% for bid in job %}
+
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+
+                      {% if bid.mechanic_name %}
+                      <strong>Bid Information {{loop.index}}</strong><br>
+                      Mechanic Name: {{ bid.mechanic_name }} <br>
+                      {% else %}
+                      <p>No Bid Yet</p><br>
+                      {% endif %}
+                      {% if bid.mechanic_phone %}
+                      Mechanic Phone: {{ bid.mechanic_phone }} <br>
+                      {% endif %}
+                      {% if bid.mechanic_rating %}
+                      Mechanic Ratings: {{bid.mechanic_rating}} <br>
+                      {% endif %}
+                      {% if bid.bid_amount %}
+                      Bid Amount: {{ bid.bid_amount }} <br><br>
+                      <button class="btn btn-success "  type="button" data-bid-id="{{ bid.bid_id }}" id="accept_bid">Accept Bid</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% endfor %}
+
+              </div>
+              {% endfor %}
           </div>
         </div>
-        <hr>
-      </div>
+        </div>
+
+
 {% endblock content %}

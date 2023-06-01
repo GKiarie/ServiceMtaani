@@ -65,8 +65,8 @@ def user_login(user=None):
                 login_user(user_obj, remember=True)
                 return redirect("/mechanic")
             else:
-                flash('Wrong password. Try again', category="error")        
-        
+                flash('Wrong password. Try again', category="error")
+
         if user == "client":
             user_obj = storage.find(Client, "email", newdata.get("email"))
             if not user_obj:
@@ -99,7 +99,7 @@ def user_signup(user=None):
                 user_obj = Vendor(**newdata)
                 user_obj.save()
                 return redirect('/login/vendor')
-            
+
         if user == "client":
             if storage.find(Client, "email", newdata.get("email")):
                 flash('Email already exists', category='error')
@@ -215,7 +215,7 @@ def mechanic_jobs():
             if bid.job in all_jobs:
                 all_jobs.remove(bid.job)
         return render_template("mechanic_homepage.html", all_jobs=all_jobs, current_user=current_user)
-    
+
 @app.route('/mechanic/openbids', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def mechanic_openbids():
@@ -242,7 +242,7 @@ def mechanic_openbids():
         bid_obj.bid_amount = newdata['bid_amount']
         bid_obj.save()
         return bids_dict
-    
+
 @app.route('/mechanic/openjobs', strict_slashes=False)
 @login_required
 def active_jobs():
@@ -286,7 +286,7 @@ def mechanic_reviews():
     reviews = mech_obj.reviews
     return reviews
 
-@app.route('/client', methods=["GET", "POST", "DELETE"], strict_slashes=False)
+@app.route('/client', methods=["GET", "POST", "PUT", "DELETE"], strict_slashes=False)
 @login_required
 def client_home():
     """Render the client homepage"""
@@ -302,7 +302,7 @@ def client_home():
                     count += 1
                     bid_info = {}
                     bid_info['job_title'] = job.job_title
-                    bid_info['job_description'] = job.job_description             
+                    bid_info['job_description'] = job.job_description
                     bid_info['bid_amount'] = bid.bid_amount
                     bid_info['bid_id'] = bid.id
                     bid_info['mechanic_phone'] = bid.mechanic.phone_number
@@ -317,8 +317,54 @@ def client_home():
                 bids_list.append(job_info)
             if job.job_status == 1:
                 jobs[f'Job.{job.id}'] = bids_list
-        return jobs
-        # return render_template("client_homepage.html", current_user=current_user)
+
+
+            # return jobs
+        return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
+
+    if request.method == "PUT":
+        my_dict = request.get_json()
+
+        bid_obj = storage.get(Bid, my_dict['bid_id'])
+        bid_obj.bid_status = 1
+        bid_obj.job.job_status = 2
+
+        bid_obj.save()
+        bid_obj.job.save()
+
+        jobs = {}
+        for job in client_obj.jobs:
+            bids_list = []
+            bids = storage.query_bids(current_user.id, job.id)
+            count = 0
+            if bids:
+                for bid in bids:
+                    count += 1
+                    bid_info = {}
+                    bid_info['job_title'] = job.job_title
+                    bid_info['job_description'] = job.job_description
+                    bid_info['bid_amount'] = bid.bid_amount
+                    bid_info['bid_id'] = bid.id
+                    bid_info['mechanic_phone'] = bid.mechanic.phone_number
+                    bid_info['mechanic_name'] = f"{bid.mechanic.first_name} {bid.mechanic.last_name}"
+                    bid_info['mechanic_rating'] = bid.mechanic.rating
+                    bid_info['bid_count'] = count
+                    bids_list.append(bid_info)
+            if not bids:
+                job_info = {}
+                job_info['job_title'] = job.job_title
+                job_info['job_description'] = job.job_description
+                bids_list.append(job_info)
+            if job.job_status == 1:
+                jobs[f'Job.{job.id}'] = bids_list
+
+        return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
+
+
+
+        # for key, val in my_dict.items():
+        #     setattr(client_obj, key, val)
+        # client_obj.save()
 
 @app.route('/client/activejobs', methods=["GET", "POST"], strict_slashes=False)
 @login_required
@@ -363,7 +409,7 @@ def client_completed_jobs():
                 job_info.append(bid_info)
             jobs[f'Job.{job.id}'] = job_info
         return jobs
-    
+
 @app.route('/client/myorders', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def client_orders():
