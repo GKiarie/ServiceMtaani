@@ -79,13 +79,17 @@
     <div class="accordion-item">
         <h2 class="accordion-header" id="heading{{ loop.index }}">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
-            Delivered Order #{{ loop.index }}
+            Delivered Order #{{ loop.index }} - {{ order.part_name }}
           </button>
         </h2>
         <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             <strong>Order Information</strong><br>
-            Client First Name: {{ order.client_first_name }} <br>Client Last Name: {{ order.client_last_name }} <br>Client Phone Number: {{ order.client_phone_number }} <br>Parts: {{ order.part_name }} <br><br>
+            <strong>Client First Name:</strong> {{ order.client_name }}<br>
+            <strong>Client Phone Number:</strong> {{ order.client_phone_number }} <br>
+            <strong>Part Name:</strong> {{ order.part_name }} <br>
+            <strong>Part Description:</strong> {{ order.part_description }}<br>
+            <strong>Part Price:</strong> {{ order.part_price }}
           </div>
         </div>
       </div>

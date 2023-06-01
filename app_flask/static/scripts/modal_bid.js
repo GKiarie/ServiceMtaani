@@ -1,8 +1,6 @@
 $(document).on("click", ".bidForJob", function () {
-    console.log("Hello World");
     var jobId = $(this).data('id');
     $(".modal-body #job_id").val( jobId );
-    $('.bidForJob').hide();
     
     
     // console.log(jobId);
@@ -12,6 +10,10 @@ $(document).on("click", ".bidForJob", function () {
     // $('#addBookDialog').modal('show');
 });
 
-$(document).on("click", ".submitbutton", function () {
-    $('.bidForJob').hide();
+// $(document).on("click", ".submitbutton", function () {
+//     $('.bidForJob').hide();
+// });
+$(document).on("click", ".editPartDetails", function () {
+    var partId = $(this).data('id');
+    $("#part_id").val( partId );
 });

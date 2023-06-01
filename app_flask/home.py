@@ -7,6 +7,7 @@ from models import storage
 from models.vendor import Vendor
 from models.order import Order
 from models.job import Job
+from models.part import Part
 from models.bid import Bid
 from models.mechanic import Mechanic
 from models.client import Client
@@ -38,7 +39,7 @@ def homepage():
     return render_template("index.html")
 
 @app.route('/login/<user>', methods=["GET", "POST"], strict_slashes=False)
-def login(user=None):
+def user_login(user=None):
     """Render the homepage"""
     if request.method == "POST":
         data = request.form
@@ -79,7 +80,7 @@ def login(user=None):
     return render_template("login.html")
 
 @app.route('/sign_up/<user>', methods=["GET", "POST"], strict_slashes=False)
-def vendor_signup(user=None):
+def user_signup(user=None):
     """Render the homepage"""
     if request.method == "POST":
         data = request.form
@@ -98,6 +99,7 @@ def vendor_signup(user=None):
                 user_obj = Vendor(**newdata)
                 user_obj.save()
                 return redirect('/login/vendor')
+            
         if user == "client":
             if storage.find(Client, "email", newdata.get("email")):
                 flash('Email already exists', category='error')
@@ -142,10 +144,12 @@ def vendor_orders_route():
         for order in part.orders:
             if order.status == True:
                 order_info = {}
+                client_obj = storage.get(Client, order.client_id)
                 order_info['part_name'] = part.part_name
-                order_info['client_first_name'] = storage.get(Client, order.client_id).first_name
-                order_info['client_last_name'] = storage.get(Client, order.client_id).last_name
-                order_info['client_phone_number'] = storage.get(Client, order.client_id).phone_number
+                order_info['part_price'] = part.part_price
+                order_info['part_description'] = part.part_description
+                order_info['client_name'] = f"{client_obj.first_name} {client_obj.last_name}"
+                order_info['client_phone_number'] = client_obj.phone_number
                 order_list.append(order_info)
     return render_template("vendor_orders.html", orders=order_list, current_user=current_user)
 
@@ -159,31 +163,39 @@ def vendor_delivered():
         for order in part.orders:
             if order.status == False:
                 order_info = {}
+                client_obj = storage.get(Client, order.client_id)
                 order_info['part_name'] = part.part_name
-                order_info['client_first_name'] = storage.get(Client, order.client_id).first_name
-                order_info['client_last_name'] = storage.get(Client, order.client_id).last_name
-                order_info['client_phone_number'] = storage.get(Client, order.client_id).phone_number
+                order_info['client_name'] = f"{client_obj.first_name} {client_obj.last_name}"
+                order_info['client_phone_number'] = client_obj.phone_number
+                order_info['part_price'] = part.part_price
+                order_info['part_description'] = part.part_description
                 order_list.append(order_info)
     return render_template("vendor_delivered.html", orders=order_list, current_user=current_user)
 
 
-@app.route('/vendor/catalogue', strict_slashes=False)
+@app.route('/vendor/catalogue', methods=["GET", "POST"], strict_slashes=False)
 @login_required
 def vendor_catalogue():
     """This route will return the vendor's catalogue"""
     vendor_obj = storage.get(Vendor, current_user.id)
-    return render_template("vendor_catalogue.html", items=vendor_obj.parts, current_user=current_user)
+    if request.method == "GET":
+        return render_template("vendor_catalogue.html", items=vendor_obj.parts, current_user=current_user)
+    if request.method == "POST":
+        data = request.form
+        newdata = data.copy()
+        newdata = {k: v for k, v in newdata.items() if v}
+        part_obj = storage.get(Part, newdata['part_id'])
+        del newdata['part_id']
+        for k, v in newdata.items():
+            setattr(part_obj, k, v)
+        part_obj.save()
+        vendor_obj = storage.get(Vendor, current_user.id)
+        return render_template("vendor_catalogue.html", items=vendor_obj.parts, current_user=current_user)
 
 @app.route('/mechanic/', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def mechanic_jobs():
     """This route will render the mechanic home page"""
-    # all_jobs = storage.openjobs()
-    # mech_obj = storage.get(Mechanic, current_user.id)
-    # for bid in mech_obj.bids:
-    #     if bid.job in all_jobs:
-    #         all_jobs.remove(bid.job)
-    # mech_bids = storage.get(Mechanic, current_user.id).bids
     if request.method == "GET":
         all_jobs = storage.openjobs()
         mech_obj = storage.get(Mechanic, current_user.id)
@@ -231,7 +243,7 @@ def mechanic_openbids():
         bid_obj.save()
         return bids_dict
     
-@app.route('/mechanic/activejos', strict_slashes=False)
+@app.route('/mechanic/openjobs', strict_slashes=False)
 @login_required
 def active_jobs():
     mech_obj = storage.get(Mechanic, current_user.id)
@@ -240,7 +252,7 @@ def active_jobs():
     for bid in bids:
         if bid.bid_status == 1:
             job_obj = storage.get(Job, bid.job_id)
-            if job_obj.job_status != 0:
+            if job_obj.job_status == 2:
                 bid_dict = {}
                 bid_dict['id'] = bid.id
                 bid_dict['bid_amount'] = bid.bid_amount
@@ -273,6 +285,99 @@ def mechanic_reviews():
     mech_obj = storage.get(Mechanic, current_user.id)
     reviews = mech_obj.reviews
     return reviews
+
+@app.route('/client', methods=["GET", "POST", "DELETE"], strict_slashes=False)
+@login_required
+def client_home():
+    """Render the client homepage"""
+    client_obj = storage.get(Client, current_user.id)
+    if request.method == "GET":
+        jobs = {}
+        for job in client_obj.jobs:
+            bids_list = []
+            bids = storage.query_bids(current_user.id, job.id)
+            count = 0
+            if bids:
+                for bid in bids:
+                    count += 1
+                    bid_info = {}
+                    bid_info['job_title'] = job.job_title
+                    bid_info['job_description'] = job.job_description             
+                    bid_info['bid_amount'] = bid.bid_amount
+                    bid_info['bid_id'] = bid.id
+                    bid_info['mechanic_phone'] = bid.mechanic.phone_number
+                    bid_info['mechanic_name'] = f"{bid.mechanic.first_name} {bid.mechanic.last_name}"
+                    bid_info['mechanic_rating'] = bid.mechanic.rating
+                    bid_info['bid_count'] = count
+                    bids_list.append(bid_info)
+            if not bids:
+                job_info = {}
+                job_info['job_title'] = job.job_title
+                job_info['job_description'] = job.job_description
+                bids_list.append(job_info)
+            if job.job_status == 1:
+                jobs[f'Job.{job.id}'] = bids_list
+        return jobs
+        # return render_template("client_homepage.html", current_user=current_user)
+
+@app.route('/client/activejobs', methods=["GET", "POST"], strict_slashes=False)
+@login_required
+def client_active_jobs():
+    active_jobs = storage.query_active_jobs(current_user.id)
+    if request.method == "GET":
+        jobs = {}
+        for job in active_jobs:
+            job_info = []
+            bids = storage.query_winning_bid(job.id)
+            for bid in bids:
+                bid_info = {}
+                bid_info['job_title'] = job.job_title
+                bid_info['job_description'] = job.job_description
+                bid_info['bid_amount'] = bid.bid_amount
+                bid_info['bid_id'] = bid.id
+                bid_info['mechanic_phone'] = bid.mechanic.phone_number
+                bid_info['mechanic_name'] = f"{bid.mechanic.first_name} {bid.mechanic.last_name}"
+                bid_info['mechanic_rating'] = bid.mechanic.rating
+                job_info.append(bid_info)
+            jobs[f'Job.{job.id}'] = job_info
+        return jobs
+
+@app.route('/client/completedjobs', methods=["GET", "POST"], strict_slashes=False)
+@login_required
+def client_completed_jobs():
+    if request.method == "GET":
+        completed_jobs = storage.query_completed_jobs(current_user.id)
+        jobs = {}
+        for job in completed_jobs:
+            job_info = []
+            bids = storage.query_winning_bid(job.id)
+            for bid in bids:
+                bid_info = {}
+                bid_info['job_title'] = job.job_title
+                bid_info['job_description'] = job.job_description
+                bid_info['bid_amount'] = bid.bid_amount
+                bid_info['bid_id'] = bid.id
+                bid_info['mechanic_phone'] = bid.mechanic.phone_number
+                bid_info['mechanic_name'] = f"{bid.mechanic.first_name} {bid.mechanic.last_name}"
+                bid_info['mechanic_rating'] = bid.mechanic.rating
+                job_info.append(bid_info)
+            jobs[f'Job.{job.id}'] = job_info
+        return jobs
     
+@app.route('/client/myorders', methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def client_orders():
+    client_obj = storage.get(Client, current_user.id)
+    order_list = []
+    for order in client_obj.orders:
+        order_info = {}
+        order_info['order_id'] = order.id
+        order_info['order_part_name'] = order.parts[0].part_name
+        order_info['order_part_description'] = order.parts[0].part_description
+        order_info['vendor_name'] = f'{order.parts[0].vendor.first_name} {order.parts[0].vendor.last_name}'
+        order_info['vendor_phone_number'] = order.parts[0].vendor.phone_number
+        order_list.append(order_info)
+    return order_list
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
