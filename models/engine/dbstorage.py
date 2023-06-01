@@ -105,3 +105,26 @@ class DBStorage:
         """Return a list of open jobs"""
         jobs = self.__session.query(Job).filter(Job.job_status == 1).all()
         return jobs
+    
+    def query_bids(self, client_id, job_id=None):
+        """Return all placed bids for client jobs"""
+        if not job_id:
+            active_jobs_bids = self.__session.query(Bid).join(Job).join(Client).filter(Client.id == client_id, Job.job_status == 1).all()
+        if job_id:
+            active_jobs_bids = self.__session.query(Bid).join(Job).join(Client).filter(Client.id == client_id, Job.job_status == 1, Job.id == job_id).all()
+        return active_jobs_bids
+    
+    def query_active_jobs(self, client_id):
+        """Return all assigned jobs"""
+        assigned_jobs = self.__session.query(Job).join(Client).filter(Client.id == client_id, Job.job_status == 2).all()
+        return assigned_jobs
+    
+    def query_winning_bid(self, job_id):
+        """Query the winning bid from the db"""
+        winning_bid = self.__session.query(Bid).join(Job).filter(Job.id == job_id, Bid.bid_status == True).all()
+        return winning_bid
+    
+    def query_completed_jobs(self, client_id):
+        """Find the completed jobs for a client"""
+        completed_jobs = self.__session.query(Job).join(Client).filter(Client.id == client_id, Job.job_status == 3).all()
+        return completed_jobs
