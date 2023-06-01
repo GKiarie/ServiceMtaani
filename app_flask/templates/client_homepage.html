@@ -2,62 +2,117 @@
 <!-- {% block title %}My Child Page{% endblock %} -->
 {% block content %}
 <div class="container">
-    <div class="container row">
-    <button type="button" class="btn btn-primary btn-lg col  mr-2">Open Jobs</button>
-    <button type="button" class="btn btn-secondary btn-lg col  mr-2">Active Jobs</button>
-    <button type="button" class="btn btn-secondary btn-lg col  mr-2">Completed Jobs</button>
-    <button type="button" class="btn btn-secondary btn-lg col  mr-2">Request a Service</button>
-    <button type="button" class="btn btn-secondary btn-lg col ">My Cart</button>
+  <div class="container row">
+    <button type="button" class="btn btn-primary btn-lg btn-jobs col btn-open-jobs  mr-2">Open Jobs</button>
+    <button type="button" class="btn btn-secondary btn-lg btn-jobs col btn-active-jobs mr-2">Active Jobs</button>
+    <button type="button" class="btn btn-secondary btn-lg btn-jobs col  btn-completed-jobs mr-2">Completed Jobs</button>
+    <button type="button" id="openModalBtn" data-toggle="modal" data-target="#createJobModal" class="btn btn-secondary btn-lg btn-request-service btn-jobs col  mr-2">Request a Service</button>
+    <button type="button" class="btn btn-secondary btn-lg btn-jobs col btn-my-orders">My Orders</button>
+  </div>
+
+  <div class="modal" id="createJobModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h5>Job Details</h5>
+          <form id="myForm">
+            <div class="form-group">
+              <label for="job_title">Job Title</label>
+              <input type="text" class="form-control" id="job_title" placeholder="Enter job title">
+            </div>
+            <div class="form-group">
+              <label for="job_desc">Job Description</label>
+              <input type="text" class="form-control" id="job_desc" placeholder="Enter job description">
+            </div>
+          </form>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id="submitBtn" type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="container">
-        <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
-        </div>
-        </div>
-        <div class="container">
-        <div class="accordion" id="accordionExample">
-            {% for job in jobs.values() %}
-
-            <div class="card">
-                <div class="card-header" id="headingOne">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Job #{{loop.index}} - {{job[0].job_title}}
-                    </button>
-                  </h2>
-                </div>
-
-
-                {% for bid in job %}
-
-                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                    <div class="card-body">
-
-                      {% if bid.mechanic_name %}
-                      <strong>Bid Information {{loop.index}}</strong><br>
-                      Mechanic Name: {{ bid.mechanic_name }} <br>
-                      {% else %}
-                      <p>No Bid Yet</p><br>
-                      {% endif %}
-                      {% if bid.mechanic_phone %}
-                      Mechanic Phone: {{ bid.mechanic_phone }} <br>
-                      {% endif %}
-                      {% if bid.mechanic_rating %}
-                      Mechanic Ratings: {{bid.mechanic_rating}} <br>
-                      {% endif %}
-                      {% if bid.bid_amount %}
-                      Bid Amount: {{ bid.bid_amount }} <br><br>
-                      <button class="btn btn-success "  type="button" data-bid-id="{{ bid.bid_id }}" id="accept_bid">Accept Bid</button>
-                      {% endif %}
-                    </div>
-                  </div>
-                  {% endfor %}
-
+  <div class="container">
+    <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+    </div>
+  </div>
+  <div class="container">
+    <!-- Start of Accordion orders -->
+    <div class="accordion" id="accordionExample">
+      {% for item in orders %}
+      <div class="accordion-item">
+          <h2 class="accordion-header" id="heading{{ loop.index }}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+              Part #{{ loop.index }} - {{ item.part_name }}
+            </button>
+          </h2>
+          <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <strong>Part Information</strong><br>
+              Ordered Part Name: {{ item.order_part_name }} <br>
+              Ordered Part Description: {{ item.order_part_description }} <br>
+              Vendor Name: {{item.vendor_name}} <br>
+              Vendor Phone Number: {{item.vendor_phone_number}} <br>
+              Part Price: {{ item.part_price }} <br><br>
+              <div>
+                  <button type="button" class="editPartDetails btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ item.id }}">Edit</button>
               </div>
-              {% endfor %}
+            </div>
           </div>
         </div>
+      {% endfor %}
+      </div>
+
+
+
+    <!-- End of Accordion orders -->
+    <h1 id="jobs-heading">Open Bids</h1>
+    <div class="accordion" id="accordionExample">
+      {% for job in jobs.values() %}
+
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Job #{{loop.index}} - {{job[0].job_title}}
+            </button>
+          </h2>
         </div>
+
+
+        {% for bid in job %}
+
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+
+            {% if bid.mechanic_name %}
+            <strong>Bid Information {{loop.index}}</strong><br>
+            Mechanic Name: {{ bid.mechanic_name }} <br>
+            {% else %}
+            <p>No Bid Yet</p><br>
+            {% endif %}
+            {% if bid.mechanic_phone %}
+            Mechanic Phone: {{ bid.mechanic_phone }} <br>
+            {% endif %}
+            {% if bid.mechanic_rating %}
+            Mechanic Ratings: {{bid.mechanic_rating}} <br>
+            {% endif %}
+            {% if bid.bid_amount %}
+            Bid Amount: {{ bid.bid_amount }} <br><br>
+            <button class="btn btn-success "  type="button" data-bid-id="{{ bid.bid_id }}" id="accept_bid">Accept Bid</button>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 
 
 {% endblock content %}

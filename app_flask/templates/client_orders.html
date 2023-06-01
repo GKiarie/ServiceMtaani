@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+<!-- {% block title %}My Child Page{% endblock %} -->
+{% block content %}
+<div class="container">
+  <div class="container row">
+    <button type="button" class="btn btn-primary btn-lg btn-jobs col btn-open-jobs  mr-2">Open Jobs</button>
+    <button type="button" class="btn btn-secondary btn-lg btn-jobs col btn-active-jobs mr-2">Active Jobs</button>
+    <button type="button" class="btn btn-secondary btn-lg btn-jobs col  btn-completed-jobs mr-2">Completed Jobs</button>
+    <button type="button" id="openModalBtn" data-toggle="modal" data-target="#createJobModal" class="btn btn-secondary btn-lg btn-request-service btn-jobs col  mr-2">Request a Service</button>
+    <button type="button" class="btn btn-secondary btn-lg btn-jobs col btn-my-orders">My Orders</button>
+  </div>
+
+
+    <!-- Start of Accordion orders -->
+    <div class="accordion" id="accordionOrder">
+      <p>Ordered Parts</p>
+      {% for item in orders %}
+      <div class="accordion-item">
+          <h2 class="accordion-header" id="heading{{ loop.index }}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+              Part #{{ loop.index }} - {{ item.part_name }}
+            </button>
+          </h2>
+          <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#accordionOrder">
+            <div class="accordion-body">
+              <strong>Part Information</strong><br>
+              Ordered Part Name: {{ item.order_part_name }} <br>
+              Ordered Part Description: {{ item.order_part_description }} <br>
+              Vendor Name: {{item.vendor_name}} <br>
+              Vendor Phone Number: {{item.vendor_phone_number}} <br>
+              Part Price: {{ item.part_price }} <br><br>
+              <div>
+                  <button type="button" class="editPartDetails btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ item.id }}">Edit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    <!-- End of Accordion orders -->
+  </div>
+</div>
+
+
+{% endblock content %}

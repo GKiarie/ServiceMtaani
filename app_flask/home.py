@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Serve flask pages"""
 
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, abort
 import time
 from models import storage
 from models.vendor import Vendor
@@ -360,11 +360,19 @@ def client_home():
 
         return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
 
+    if request.method == "POST":
+        my_dict = request.get_json()
+        my_dict['client_id'] = current_user.id
 
+        if not my_dict:
+            abort(400, "Invalid input")
 
-        # for key, val in my_dict.items():
-        #     setattr(client_obj, key, val)
-        # client_obj.save()
+        else:
+            job_obj = Job(**my_dict)
+            job_obj.save()
+
+        return job_obj.to_dict()
+
 
 @app.route('/client/activejobs', methods=["GET", "POST"], strict_slashes=False)
 @login_required
@@ -386,7 +394,8 @@ def client_active_jobs():
                 bid_info['mechanic_rating'] = bid.mechanic.rating
                 job_info.append(bid_info)
             jobs[f'Job.{job.id}'] = job_info
-        return jobs
+        return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
+
 
 @app.route('/client/completedjobs', methods=["GET", "POST"], strict_slashes=False)
 @login_required
@@ -408,7 +417,9 @@ def client_completed_jobs():
                 bid_info['mechanic_rating'] = bid.mechanic.rating
                 job_info.append(bid_info)
             jobs[f'Job.{job.id}'] = job_info
-        return jobs
+        # return jobs
+        return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
+
 
 @app.route('/client/myorders', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
@@ -422,8 +433,10 @@ def client_orders():
         order_info['order_part_description'] = order.parts[0].part_description
         order_info['vendor_name'] = f'{order.parts[0].vendor.first_name} {order.parts[0].vendor.last_name}'
         order_info['vendor_phone_number'] = order.parts[0].vendor.phone_number
+        order_info['part_price'] = order.parts[0].part_price
         order_list.append(order_info)
-    return order_list
+    return render_template("client_orders.html", title="Client Home", orders=order_list, current_user=current_user)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
