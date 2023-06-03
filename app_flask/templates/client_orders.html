@@ -3,43 +3,42 @@
 {% block content %}
 <div class="container">
   <div class="container row">
-    <button type="button" class="btn btn-primary btn-lg btn-jobs col btn-open-jobs  mr-2">Open Jobs</button>
-    <button type="button" class="btn btn-secondary btn-lg btn-jobs col btn-active-jobs mr-2">Active Jobs</button>
-    <button type="button" class="btn btn-secondary btn-lg btn-jobs col  btn-completed-jobs mr-2">Completed Jobs</button>
+    <a type="button" class="btn btn-secondary btn-lg btn-jobs col btn-open-jobs  mr-2" href="/client/" >Open Jobs</a>
+    <a type="button" class="btn btn-secondary btn-lg btn-jobs col btn-active-jobs mr-2" href="/client/activejobs">Active Jobs</a>
+    <a type="button" class="btn btn-secondary btn-lg btn-jobs col  btn-completed-jobs mr-2" href="/client/completedjobs">Completed Jobs</a>
     <button type="button" id="openModalBtn" data-toggle="modal" data-target="#createJobModal" class="btn btn-secondary btn-lg btn-request-service btn-jobs col  mr-2">Request a Service</button>
-    <button type="button" class="btn btn-secondary btn-lg btn-jobs col btn-my-orders">My Orders</button>
+    <a type="button" class="btn btn-primary btn-lg btn-jobs col btn-my-orders" href="/client/myorders">My Orders</a>
   </div>
 
 
-    <!-- Start of Accordion orders -->
-    <div class="accordion" id="accordionOrder">
-      <p>Ordered Parts</p>
-      {% for item in orders %}
-      <div class="accordion-item">
-          <h2 class="accordion-header" id="heading{{ loop.index }}">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
-              Part #{{ loop.index }} - {{ item.part_name }}
-            </button>
-          </h2>
-          <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#accordionOrder">
-            <div class="accordion-body">
-              <strong>Part Information</strong><br>
-              Ordered Part Name: {{ item.order_part_name }} <br>
-              Ordered Part Description: {{ item.order_part_description }} <br>
-              Vendor Name: {{item.vendor_name}} <br>
-              Vendor Phone Number: {{item.vendor_phone_number}} <br>
-              Part Price: {{ item.part_price }} <br><br>
-              <div>
-                  <button type="button" class="editPartDetails btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ item.id }}">Edit</button>
-              </div>
-            </div>
+  <!-- Start of Accordion orders -->
+  <div class="accordion" id="accordionExample">
+    <p>Ordered Parts</p>
+    {% for part in orders %}
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading{{ loop.index }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+          Part #{{ loop.index }} - {{ part.part_name }}
+        </button>
+      </h2>
+      <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <strong>Part Information</strong><br>
+          <p>Ordered Part Name: {{ part.order_part_name }}</p> <br>
+          <p>Ordered Part Description: {{ part.order_part_description }}</p> <br>
+          <p>Vendor Name: {{part.vendor_name}}</p> <br>
+          <p>Vendor Phone Number: {{part.vendor_phone_number}}</p> <br>
+          <p>Part Price: {{ part.part_price }}</p> <br><br>
+          <div>
+            <button type="button" class="editPartDetails btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ part.id }}">Edit</button>
           </div>
         </div>
-      {% endfor %}
       </div>
-    <!-- End of Accordion orders -->
+    </div>
+    {% endfor %}
   </div>
+  <!-- End of Accordion orders -->
 </div>
-
+</div>
 
 {% endblock content %}

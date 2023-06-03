@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container row">
+    <a type="button" class="btn btn-secondary btn-lg btn-jobs col btn-open-jobs  mr-2" href="/client/" >Open Jobs</a>
+    <a type="button" class="btn btn-secondary btn-lg btn-jobs col btn-active-jobs mr-2" href="/client/activejobs">Active Jobs</a>
+    <a type="button" class="btn btn-primary btn-lg btn-jobs col  btn-completed-jobs mr-2" href="/client/completedjobs">Completed Jobs</a>
+    <button type="button" id="openModalBtn" data-toggle="modal" data-target="#createJobModal" class="btn btn-secondary btn-lg btn-request-service btn-jobs col  mr-2">Request a Service</button>
+    <a type="button" class="btn btn-secondary btn-lg btn-jobs col btn-my-orders" href="/client/myorders">My Orders</a>
+</div>
+
+
+<!-- Create Job Modal-->
+<div class="modal" id="createJobModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5>Job Details</h5>
+                <form id="myForm">
+                    <div class="form-group">
+                        <label for="job_title">Job Title</label>
+                        <input type="text" class="form-control" id="job_title" placeholder="Enter job title">
+                    </div>
+                    <div class="form-group">
+                        <label for="job_desc">Job Description</label>
+                        <input type="text" class="form-control" id="job_desc" placeholder="Enter job description">
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="submitBtn" type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Create Job Modal -->
+
+
+
+<h1 id="jobs-heading">Completed Jobs</h1>
+<div class="accordion" id="accordionExample">
+    {% for job in jobs.values() %}
+
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Job #{{loop.index}} - {{job[0].job_title}}
+                </button>
+            </h2>
+        </div>
+
+
+        {% for bid in job %}
+
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+
+                {% if bid.mechanic_name %}
+                <strong>Bid Information {{loop.index}}</strong><br>
+                Mechanic Name: {{ bid.mechanic_name }} <br>
+                {% else %}
+                <p>No Bid Yet</p><br>
+                {% endif %}
+                {% if bid.mechanic_phone %}
+                Mechanic Phone: {{ bid.mechanic_phone }} <br>
+                {% endif %}
+                {% if bid.mechanic_rating %}
+                Mechanic Ratings: {{bid.mechanic_rating}} <br>
+                {% endif %}
+                {% if bid.bid_amount %}
+                Bid Amount: {{ bid.bid_amount }} <br><br>
+                <button class="btn btn-success "  type="button" data-bid-id="{{ bid.bid_id }}" id="accept_bid">Accept Bid</button>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock content%}
