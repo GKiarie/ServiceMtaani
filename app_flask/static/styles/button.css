@@ -1,14 +1,23 @@
-.btn-space {
-    margin-right: 5px;
+/* Mechanic Job Tiles */
+.job-tiles {
+    height: 100%; /*tiles to stretch to march the largest in height*/
+    /* font-size: 1.2vw; Adjust the value as needed */
 }
-.job-tile {
-    margin-top: 50px;
+.job-tiles h2 {
+    background-color:#f8f8f8;
+    font-size: 2vw;
+    padding: 2px;
+    width: 100%;
+    letter-spacing: 1.5px;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-.vendor-carousel {
-    margin-top: 20px;
-}
-.nav-10 {
-    height: 5rem;
+.job-tiles p {
+    width: 100%;
+    letter-spacing: 1px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* remove accordion border */
