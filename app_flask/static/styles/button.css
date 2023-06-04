@@ -8,5 +8,20 @@
     margin-top: 20px;
 }
 .nav-10 {
-    height: 10rem;
+    height: 5rem;
+}
+
+/* remove accordion border */
+.accordionBtn:focus,
+.accordionBtn {
+    outline: none ;
+    box-shadow: none;
+    /* text-decoration: none !important; */
+
+  }
+/* accordion job delete button */
+.btn-delete {
+outline: none !important;
+box-shadow: none !important;
+background: none;
 }

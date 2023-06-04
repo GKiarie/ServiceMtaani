@@ -2,12 +2,12 @@
 <!-- {% block title %}My Child Page{% endblock %} -->
 {% block content %}
 <div class="container">
-  <div class="container row">
-    <a type="button" class="btn btn-primary btn-lg btn-jobs col btn-open-jobs  mr-2" href="/client/" >Open Jobs</a>
-    <a type="button" class="btn btn-secondary btn-lg btn-jobs col btn-active-jobs mr-2" href="/client/activejobs">Active Jobs</a>
-    <a type="button" class="btn btn-secondary btn-lg btn-jobs col  btn-completed-jobs mr-2" href="/client/completedjobs">Completed Jobs</a>
-    <button type="button" id="openModalBtn" data-toggle="modal" data-target="#createJobModal" class="btn btn-secondary btn-lg btn-request-service btn-jobs col  mr-2">Request a Service</button>
-    <a type="button" class="btn btn-secondary btn-lg btn-jobs col btn-my-orders" href="/client/myorders">My Orders</a>
+  <div class="row mt-1">
+    <a type="button" class="btn btn-primary btn-lg btn-jobs col-md  mr-2 btn-open-jobs  " href="/client/" >Open Jobs</a>
+    <a type="button" class="btn btn-secondary btn-lg btn-jobs col-md  mr-2 btn-active-jobs " href="/client/activejobs">Active Jobs</a>
+    <a type="button" class="btn btn-secondary btn-lg btn-jobs col-md  mr-2  btn-completed-jobs " href="/client/completedjobs">Completed Jobs</a>
+    <button type="button" id="openModalBtn" data-toggle="modal" data-target="#createJobModal" class="btn btn-secondary btn-lg btn-request-service btn-jobs col-md  mr-2  ">Request a Service</button>
+    <a type="button" class="btn btn-secondary btn-lg btn-jobs col-md  btn-my-orders" href="/client/myorders">My Orders</a>
   </div>
   <!-- Create Job Modal-->
   <div class="modal" id="createJobModal">
@@ -36,61 +36,55 @@
   </div>
   <!-- End Create Job Modal -->
 
-  <div class="container">
-    <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
-    </div>
-  </div>
 
   <!-- Jobs Tiles Section -->
-  <div class="container">
+  <div class="accordion" id="accordionExample">
     <h1 id="jobs-heading">Open Jobs</h1>
-    <div class="accordion" id="accordionExample">
 
-      {% for job in jobs.values() %}
-      <div class="card">
-        <div class="card-header" id="headingOne">
-          <h2 class="mb-0">
-            <button class="btn btn-link btn-block text-left row" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              <div class="col-md-8">
-                <p>Job #{{loop.index}} - {{job[0].job_title}}</p>
-              </div>
-              <div class="col-md-4">
-                <button class="btn-outline-danger">DELETE</button>
-              </div>
-            </button>
-          </h2>
+    {% for job in jobs.values() %}
+    <div class="card my-2 shadow-sm">
+      <div class="card-header row d-flex justify-content-between" id="headingOne">
+        <h2 class="mb-0 col-md-9">
+          <button class="btn btn-block text-left accordionBtn d-flex align-items-center justify-content-between"  type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <p>Job #{{loop.index}} - {{job[0].job_title}} </p>
+            <i class="fa-solid fa-chevron-down fa-shake fa-lg"></i>
+          </button>
+        </h2>
+        <div class="col-md-3 d-flex align-items-center justify-content-end">
+          <button type="button" class="btn-outline-danger rounded btn-delete" data-job-id="{{job[0].job_id}}">
+            <i class="fa-solid fa-trash"></i> Delete
+          </button>
         </div>
-
-        {% for bid in job %}
-        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-          <div class="card-body">
-
-            {% if bid.mechanic_name %}
-            <strong>Bid Information {{loop.index}}</strong><br>
-            Mechanic Name: {{ bid.mechanic_name }} <br>
-            {% else %}
-            <p>No Bid Yet</p><br>
-            {% endif %}
-            {% if bid.mechanic_phone %}
-            Mechanic Phone: {{ bid.mechanic_phone }} <br>
-            {% endif %}
-            {% if bid.mechanic_rating %}
-            Mechanic Ratings: {{bid.mechanic_rating}} <br>
-            {% endif %}
-            {% if bid.bid_amount %}
-            Bid Amount: {{ bid.bid_amount }} <br><br>
-            <button class="btn btn-success "  type="button" data-bid-id="{{ bid.bid_id }}" id="accept_bid">Accept Bid</button>
-            {% endif %}
-          </div>
-        </div>
-        {% endfor %}
 
       </div>
+
+      {% for bid in job %}
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+
+          {% if bid.mechanic_name %}
+          <strong>Bid Information {{loop.index}}</strong>
+          <p>Mechanic Name: {{ bid.mechanic_name }}</p>
+          {% else %}
+          <p>No Bid Yet</p>
+          {% endif %}
+          {% if bid.mechanic_phone %}
+          <p>Mechanic Phone: {{ bid.mechanic_phone }}</p>
+          {% endif %}
+          {% if bid.mechanic_rating %}
+          <p>Mechanic Ratings: {{bid.mechanic_rating}}</p>
+          {% endif %}
+          {% if bid.bid_amount %}
+          <p>Bid Amount: {{ bid.bid_amount }}</p>
+          <button class="btn btn-success "  type="button" data-bid-id="{{ bid.bid_id }}" id="accept_bid">Accept Bid</button>
+          {% endif %}
+        </div>
+      </div>
       {% endfor %}
+
     </div>
+    {% endfor %}
   </div>
   <!-- Jobs Section -->
 </div>
-
-
 {% endblock content %}

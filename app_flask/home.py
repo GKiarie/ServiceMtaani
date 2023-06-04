@@ -318,6 +318,7 @@ def client_home():
                     count += 1
                     bid_info = {}
                     bid_info['job_title'] = job.job_title
+                    bid_info['job_id'] = bid.job_id
                     bid_info['job_description'] = job.job_description
                     bid_info['bid_amount'] = bid.bid_amount
                     bid_info['bid_id'] = bid.id
@@ -330,13 +331,20 @@ def client_home():
                 job_info = {}
                 job_info['job_title'] = job.job_title
                 job_info['job_description'] = job.job_description
+                job_info['job_id'] = job.id
                 bids_list.append(job_info)
             if job.job_status == 1:
                 jobs[f'Job.{job.id}'] = bids_list
-
-
-            # return jobs
+        # return jobs
         return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
+
+    if request.method == "DELETE":
+        my_dict = request.get_json()
+        job_obj = storage.get(Job, my_dict['job_id'])
+        job_obj.delete()
+        storage.save()
+
+        return jsonify({"Message": "Deleted and gone"})
 
     if request.method == "PUT":
         my_dict = request.get_json()
