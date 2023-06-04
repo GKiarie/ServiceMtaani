@@ -111,7 +111,7 @@ $(document).ready(function() {
       contentType: "application/json",
       success: function(response) {
         // Handle the success response
-        console.log("Data sent successfully");
+        // console.log("Data sent successfully");
         // Optionally, you can close the modal after successful submission
         //   $("#myModal").modal("hide");
       },
@@ -121,5 +121,34 @@ $(document).ready(function() {
       }
     });
     location.reload(true)
+  });
+
+  //Delete a Job
+  $(".btn-delete").click(function(){
+    var job_id = $(this).data("job-id");
+    // console.log("We are here");
+    // console.log("Job Id:" + job_id);
+
+    var data = {job_id: job_id};
+
+    $.ajax({
+      url: "/client",
+      method: "DELETE",
+      data: JSON.stringify(data),
+      contentType: "application/json",
+      success: function(response) {
+        // Handle the success response
+        console.log("Job deleted successfully");
+        // Optionally, you can close the modal after successful submission
+        //   $("#myModal").modal("hide");
+      },
+      error: function(xhr, status, error) {
+        // Handle the error response
+        console.error("Error sending data:", error);
+      }
+
+    });
+    location.reload(true)
+
   });
 });
