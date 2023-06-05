@@ -36,7 +36,7 @@ def load_user(id):
 @app.route('/', strict_slashes=False)
 def homepage():
     """Render the homepage"""
-    return render_template("index.html")
+    return render_template("landing_page.html")
 
 @app.route('/login/<user>', methods=["GET", "POST"], strict_slashes=False)
 def user_login(user=None):
@@ -203,7 +203,7 @@ def vendor_catalogue():
         # vendor_obj = storage.get(Vendor, current_user.id)
         # return data
         return jsonify({'message': 'Part deleted successfully'}), 200
-    
+
 @app.route('/add_new_part', methods=['GET', 'POST'])
 def vendor_parts():
     """Take in new part and add to db"""
