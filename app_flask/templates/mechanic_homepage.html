@@ -11,8 +11,8 @@
   <!-- Example row of columns -->
   <div class="row">
     {% for job in all_jobs %}
-    <div class="col-md-4">
-      <div class="card job-tiles d-flex flex-column mt-1  shadow">
+    <div class="col-md-4 mt-3">
+      <div class="card job-tiles d-flex flex-column shadow">
         <h2>{{ job.job_title }}</h2>
         <p class="px-3 text-justify">{{ job.job_description }}</p>
         <div class="mt-auto text-right p-2 p-2">
