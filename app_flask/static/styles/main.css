@@ -103,6 +103,7 @@ a {
     position: relative;
     z-index: 2;
     overflow: hidden;
+    height: 100%;
 }
 
 .service::after {
@@ -260,4 +261,14 @@ form .form-control {
 
 .footer-bottom {
     background-color: #242933;
+}
+
+.flash-messages {
+    list-style: none;
+    padding: 0;
+}
+
+.flash-message {
+    padding: 10px;
+    border: 1px solid #ccc;
 }
