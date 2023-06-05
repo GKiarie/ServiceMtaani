@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Serve flask pages"""
 
-from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify, jsonify
 import time
 from models import storage
 from models.vendor import Vendor
@@ -129,10 +129,15 @@ def logout():
     logout_user()
     return redirect('/')
 
-@app.route('/test', strict_slashes=False)
-def test_route():
-    """Use this route to test new pages before integrating them"""
-    return render_template("test_route.html")
+@app.route('/test', methods=["GET", "POST"], strict_slashes=False)
+def data_post():
+    if request.method == "GET":
+        return render_template("test_route.html")
+    if request.method == "POST":
+        text = request.data
+        text = text.decode('UTF-8')
+        print(text)
+        return text
 
 @app.route('/vendor', strict_slashes=False)
 @login_required
@@ -173,7 +178,7 @@ def vendor_delivered():
     return render_template("vendor_delivered.html", orders=order_list, current_user=current_user)
 
 
-@app.route('/vendor/catalogue', methods=["GET", "POST"], strict_slashes=False)
+@app.route('/vendor/catalogue', methods=["GET", "POST", "DELETE"], strict_slashes=False)
 @login_required
 def vendor_catalogue():
     """This route will return the vendor's catalogue"""
@@ -191,6 +196,25 @@ def vendor_catalogue():
         part_obj.save()
         vendor_obj = storage.get(Vendor, current_user.id)
         return render_template("vendor_catalogue.html", items=vendor_obj.parts, current_user=current_user)
+    if request.method == "DELETE":
+        data = request.get_json()
+        part_obj = storage.get(Part, data['part_id'])
+        part_obj.delete()
+        # vendor_obj = storage.get(Vendor, current_user.id)
+        # return data
+        return jsonify({'message': 'Part deleted successfully'}), 200
+    
+@app.route('/add_new_part', methods=['GET', 'POST'])
+def vendor_parts():
+    """Take in new part and add to db"""
+    data = request.form
+    newdata = data.copy()
+    newdata = {k: v for k, v in newdata.items() if v}
+    newdata['vendor_id'] = current_user.id
+    part_obj = Part(**newdata)
+    part_obj.save()
+    return redirect(url_for('vendor_catalogue'))
+
 
 @app.route('/mechanic/', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
