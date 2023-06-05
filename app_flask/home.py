@@ -2,6 +2,7 @@
 """Serve flask pages"""
 
 from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify, jsonify
+from flask_mail import Mail, Message
 import time
 from models import storage
 from models.vendor import Vendor
@@ -24,6 +25,14 @@ login_manager.login_view = 'homepage'
 login_manager.init_app(app)
 # app.config.update(SECRET_KEY='osd(99092=36&462134kjKDhuIS_d23')
 
+app.config['MAIL_SERVER'] = 'smtp.njogued.tech'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = "ed@njogued.tech"
+app.config['MAIL_PASSWORD'] = "KZukX^*^(3"
+
+mail = Mail(app)
+
 @login_manager.user_loader
 def load_user(id):
     if storage.find(Mechanic, "id", id):
@@ -33,9 +42,17 @@ def load_user(id):
     elif storage.find(Client, "id", id):
         return storage.find(Client, "id", id)
 
-@app.route('/', strict_slashes=False)
+@app.route('/', methods=["GET", "POST"], strict_slashes=False)
 def homepage():
     """Render the homepage"""
+    if request.method == "POST":
+        data = request.form
+        client_mail = data['email']
+        message = Message(data['subject'],  sender='ed@njogued.tech',  recipients=['servicemtaani@gmail.com', client_mail])
+        message.body = f"User Name: {data['full_name']}. Complaint: {data['message']}"
+        mail.send(message)
+        flash("Email sent successfully", category="success")
+        return jsonify({"Message": "Complaint lodged"})
     return render_template("landing_page.html")
 
 @app.route('/login/<user>', methods=["GET", "POST"], strict_slashes=False)
@@ -61,7 +78,6 @@ def user_login(user=None):
                 flash("No user found with provided email.", category='error')
             elif user_obj and check_password_hash(user_obj.password, newdata.get("password")):
                 flash('Login Successful', category='success')
-                all_jobs = storage.openjobs()
                 login_user(user_obj, remember=True)
                 return redirect("/mechanic")
             else:
