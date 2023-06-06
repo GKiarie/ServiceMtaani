@@ -7,6 +7,7 @@ $(document).ready(function() {
             // Add your data properties here
             bid_id: bidId
         };
+        console.log(data)
         
 
         // Send an AJAX PUT request to your Flask server
@@ -24,7 +25,6 @@ $(document).ready(function() {
                 console.error("Error sending data:", error);
             }
         });
-        location.reload(true)
     });
 
     $(".bidDelete").click(function(){

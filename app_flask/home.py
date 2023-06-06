@@ -53,7 +53,6 @@ def homepage():
         message.body = f"User Name: {data['full_name']}. Complaint: {data['message']}"
         mail.send(message)
         flash("Email sent successfully", category="success")
-        return jsonify({"Message": "Complaint lodged"})
     return render_template("landing_page.html")
 
 @app.route('/login/<user>', methods=["GET", "POST"], strict_slashes=False)
@@ -340,7 +339,7 @@ def completed_jobs():
     for bid in bids:
         if bid.bid_status == 1:
             job_obj = storage.get(Job, bid.job_id)
-            if job_obj.job_status == 0:
+            if job_obj.job_status == 3:
                 bid_dict = {}
                 bid_dict['id'] = bid.id
                 bid_dict['bid_amount'] = bid.bid_amount
@@ -453,16 +452,7 @@ def client_home():
                 jobs[f'Job.{job.id}'] = bids_list
         return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
 
-    # Accept a bid
     elif request.method == "PUT":
-        my_dict = request.get_json()
-        job_obj = storage.get(Job, my_dict['job_id'])
-        job_obj.delete()
-        storage.save()
-
-        return jsonify({"Message": "Deleted and gone"})
-
-    if request.method == "PUT":
         my_dict = request.get_json()
         print(my_dict)
 
@@ -498,7 +488,6 @@ def client_home():
                 bids_list.append(job_info)
             if job.job_status == 1:
                 jobs[f'Job.{job.id}'] = bids_list
-
         return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
 
 @app.route('/client/activejobs', methods=["GET", "POST"], strict_slashes=False)
@@ -528,18 +517,23 @@ def client_active_jobs():
         bid_obj.job.job_status = 3
         bid_obj.job.save()
         mechanic_obj = bid_obj.mechanic
-        jobs = mechanic_obj.jobs_completed + 1
-        mechanic_obj.jobs_completed = jobs
+        jobs = mechanic_obj.jobs_completed
         rated_val = int(data['ratingValue'])
-        prev_rating = mechanic_obj.rating
-        new_rating = (prev_rating + rated_val) / jobs
+        if jobs > 0:
+            prev_rating = mechanic_obj.rating * jobs
+            jobs += 1
+            new_rating = (prev_rating + rated_val) / jobs
+        else:
+            prev_rating = mechanic_obj.rating
+            new_rating = rated_val
+        mechanic_obj.jobs_completed += 1
         mechanic_obj.rating = new_rating
         mechanic_obj.save()
         review_dict = {}
         review_dict['client_id'] = bid_obj.job.client.id
         review_dict['mechanic_id'] = bid_obj.mechanic_id
         review_dict['description'] = data['review']
-        review_dict['rating'] = data['ratingValue']
+        review_dict['rating'] = rated_val
         review_obj = Review(**review_dict)
         review_obj.save()
         return redirect(url_for('client_active_jobs'))
