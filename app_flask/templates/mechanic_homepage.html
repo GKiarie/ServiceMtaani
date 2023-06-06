@@ -11,19 +11,17 @@
   <!-- Example row of columns -->
   <div class="row">
     {% for job in all_jobs %}
-    <div class="col-md-4 mt-3">
+    <div class="col-md-4 my-2">
       <div class="card job-tiles d-flex flex-column shadow">
         <h2>{{ job.job_title }}</h2>
-        <p class="px-3 text-justify">{{ job.job_description }}</p>
-        <div class="mt-auto text-right p-2 p-2">
-          <button type="button" class="bidForJob btn btn-outline-success" data-id="{{ job.id }}" data-toggle="modal" data-target="#bidModal">Bid For Job</button>
+        <p>{{ job.job_description }}</p>
+        <div class="mt-auto text-right p-2">
+          <button type="button" class="bidForJob  btn btn-outline-success" data-id="{{ job.id }}" data-toggle="modal" data-target="#bidModal">Bid For Job</button>
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
-  <hr>
-
 
   <!-- Place Bid Modal  -->
   <div class="modal fade" id="bidModal" tabindex="-1" aria-labelledby="bidModalLabel" aria-hidden="true">
@@ -51,5 +49,5 @@
       </div>
     </div>
   </div>
-  {% endblock content %}
 </div>
+  {% endblock content %}

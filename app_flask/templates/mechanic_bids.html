@@ -1,36 +1,35 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="container row">
-    <a type="button" class="btn btn-secondary btn-lg col btn-space mech-jobs mech-open-jobs" href="/mechanic/">Open Jobs</a>
-    <a type="button" class="btn btn-primary btn-lg col btn-space mech-jobs mech-open-bids" href="/mechanic/openbids">Open Bids</a>
-    <a type="button" class="btn btn-secondary btn-lg col btn-space mech-jobs mech-active-jobs" href="/mechanic/activejobs">Active Jobs</a>
-    <a type="button" class="btn btn-secondary btn-lg col btn-space mech-jobs mech-completed-jobs" href="/mechanic/completedjobs">Completed Jobs</a>
-</div>
-<div class="container job-tile">
+<div class="container">
+    <div class="row mt-1">
+        <a type="button" class="btn btn-secondary btn-lg col-md accordionBtn mr-2  mech-jobs mech-open-jobs" href="/mechanic/">Open Jobs</a>
+        <a type="button" class="btn btn-primary btn-lg col-md accordionBtn mr-2  mech-jobs mech-open-bids" href="/mechanic/openbids">Open Bids</a>
+        <a type="button" class="btn btn-secondary btn-lg col-md accordionBtn mr-2  mech-jobs mech-active-jobs" href="/mechanic/activejobs">Active Jobs</a>
+        <a type="button" class="btn btn-secondary btn-lg col-md accordionBtn  mech-jobs mech-completed-jobs" href="/mechanic/completedjobs">Completed Jobs</a>
+    </div>
+
     <!-- Example row of columns -->
     <div class="row">
         {% for bid in bids %}
-        <div class="col-md-4">
-            <h2>Job Title: {{ bid.job_title }}</h2>
-            <p>Job Description: {{ bid.job_description }}</p>
-            <p>Client: {{ bid.client_name}}</p>
-            <p>Amount: {{bid.bid_amount}}</p>
-            <div class="row" >
-                <div class="col-md-6">
-                    <button type="button" class="bidForJob btn btn-outline-success" data-bid-id="{{ bid.id }}" data-mech-id="{{current_user.id}}" data-toggle="modal" data-target="#bidModal">Edit Bid</button>
-                </div>
-                <div class="col-md-6">
-                    <button type="button" class="bidDelete btn btn-outline-danger" data-bid-id="{{ bid.id }}" data-mech-id="{{current_user.id}}">Remove Bid</button>
+        <div class="col-md-4 my-2">
+            <div class="card job-tiles d-flex flex-column shadow text-left">
+                <h2>Job: {{ bid.job_title }}</h2>
+                <p>Description: {{ bid.job_description }}</p>
+                <p>Client: {{ bid.client_name}}</p>
+                <p>Amount: Ksh. {{bid.bid_amount}}</p>
+                <div class="row mt-auto p-2" >
+                    <div class="col-md-6 text-left ">
+                        <button type="button" class="bidForJob btn btn-outline-success" data-bid-id="{{ bid.id }}" data-mech-id="{{current_user.id}}" data-toggle="modal" data-target="#bidModal">Edit Bid</button>
+                    </div>
+                    <div class="col-md-6 text-right ">
+                        <button type="button" class="bidDelete btn btn-outline-danger" data-bid-id="{{ bid.id }}" data-mech-id="{{current_user.id}}">Remove Bid</button>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-
-</div>
-
-<hr>
 
 </div>
 <!-- Edit Bid Modal  -->
@@ -59,5 +58,5 @@
         </div>
     </div>
 </div>
-
+</div>
 {% endblock content%}
