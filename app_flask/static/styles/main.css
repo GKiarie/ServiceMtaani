@@ -180,12 +180,12 @@ a {
     transform: scale(1.1);
 }
 
-#team {
+#about {
     padding-top: 120px;
     padding-bottom: 120px;
 }
 
-.team_img {
+.about_img {
     width: 125px;
     height: 125px;
     border-radius: 100px;
