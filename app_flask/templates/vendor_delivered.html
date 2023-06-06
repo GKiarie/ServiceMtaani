@@ -11,8 +11,8 @@
     <title>Delivered Orders</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
-        <div class="container">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark py-3">
+        <div class="container-fluid">
           <a class="navbar-brand" href="#">
             <img src="../static/images/logo.png" alt="" width="43" height="24" class="d-inline-block align-text-top">
             Service Mtaani
@@ -75,23 +75,48 @@
     </div>
     <div class="container">
     <div class="accordion" id="accordionExample">
-    {% for item in items %}
+    {% for order in orders %}
     <div class="accordion-item">
         <h2 class="accordion-header" id="heading{{ loop.index }}">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
-            Open Order #{{ loop.index }}
+            Delivered Order #{{ loop.index }} - {{ order.part_name }}
           </button>
         </h2>
         <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             <strong>Order Information</strong><br>
-            Client Name: {{ item.client_name }} <br>Client Phone Number: {{ item.client_phone }} <br>Parts: {{ item.parts}} <br>
+            <strong>Client First Name:</strong> {{ order.client_name }}<br>
+            <strong>Client Phone Number:</strong> {{ order.client_phone_number }} <br>
+            <strong>Part Name:</strong> {{ order.part_name }} <br>
+            <strong>Part Description:</strong> {{ order.part_description }}<br>
+            <strong>Part Price:</strong> {{ order.part_price }}
           </div>
         </div>
       </div>
     {% endfor %}
     </div>
     </div>
+
+    <footer class="bg-dark text-light py-2 fixed-bottom">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-4">
+            <h5><a href="#about-us" class="text-light text-decoration-none">About Us</a></h5>
+          </div>
+          <div class="col-sm-4">
+            <h5><a href="#contact-us" class="text-light text-decoration-none">Contact Us</a></h5>
+          </div>
+          <div class="col-sm-4">
+            <h5><a href="#team" class="text-light text-decoration-none">Team</a></h5>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col text-center">
+            <p class="m-0">© 2023 Service Mtaani.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
 
 
 

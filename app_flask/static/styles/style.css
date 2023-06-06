@@ -1,3 +1,28 @@
+body {
+    background-color:#cdcdcd;
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+}
+
+/* Hide the vertical scroll bar */
+body::-webkit-scrollbar,
+body::-webkit-scrollbar-track,
+body::-webkit-scrollbar-thumb{
+    width: 0.5em;
+    background-color: transparent;
+    background-color: transparent;
+}
+
+body p {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 24px;
+    letter-spacing: 1px;
+}
+body h1, h2, h3, h4, h5, h6 {
+    font-family: "raleway", sans-serif;
+    letter-spacing: 1.5px;
+}
 .align-center-div{
     display: flex;
     justify-content: center;
@@ -12,6 +37,3 @@
     right: 0;
 }
 
-/* .buttons-block{
-    background-color: brown;
-} */
