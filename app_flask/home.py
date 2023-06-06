@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Serve flask pages"""
 
-from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify, jsonify
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 from flask_mail import Mail, Message
 import time
 from models import storage
@@ -347,7 +347,58 @@ def mechanic_reviews():
 def client_home():
     """Render the client homepage"""
     client_obj = storage.get(Client, current_user.id)
+    # if request.method == "GET":
+    jobs = {}
+    for job in client_obj.jobs:
+        bids_list = []
+        bids = storage.query_bids(current_user.id, job.id)
+        count = 0
+        if bids:
+            for bid in bids:
+                count += 1
+                bid_info = {}
+                bid_info['job_title'] = job.job_title
+                bid_info['job_id'] = bid.job_id
+                bid_info['job_description'] = job.job_description
+                bid_info['bid_amount'] = bid.bid_amount
+                bid_info['bid_id'] = bid.id
+                bid_info['mechanic_phone'] = bid.mechanic.phone_number
+                bid_info['mechanic_name'] = f"{bid.mechanic.first_name} {bid.mechanic.last_name}"
+                bid_info['mechanic_rating'] = bid.mechanic.rating
+                bid_info['bid_count'] = count
+                bids_list.append(bid_info)
+        if not bids:
+            job_info = {}
+            job_info['job_title'] = job.job_title
+            job_info['job_description'] = job.job_description
+            job_info['job_id'] = job.id
+            bids_list.append(job_info)
+        if job.job_status == 1:
+            jobs[f'Job.{job.id}'] = bids_list
+        # return jobs
     if request.method == "GET":
+        return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
+
+    elif request.method == "DELETE":
+        my_dict = request.get_json()
+        job_obj = storage.get(Job, my_dict['job_id'])
+        job_obj.delete()
+        storage.save()
+
+        return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
+
+    elif request.method == "POST":
+        """Create a Job"""
+        my_dict = request.get_json()
+        my_dict['client_id'] = current_user.id
+
+        if not my_dict:
+            abort(400, "Invalid input")
+
+        else:
+            job_obj = Job(**my_dict)
+            job_obj.save()
+
         jobs = {}
         for job in client_obj.jobs:
             bids_list = []
@@ -375,18 +426,12 @@ def client_home():
                 bids_list.append(job_info)
             if job.job_status == 1:
                 jobs[f'Job.{job.id}'] = bids_list
-        # return jobs
+
+        # return redirect("/client")
         return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
 
-    if request.method == "DELETE":
-        my_dict = request.get_json()
-        job_obj = storage.get(Job, my_dict['job_id'])
-        job_obj.delete()
-        storage.save()
-
-        return jsonify({"Message": "Deleted and gone"})
-
-    if request.method == "PUT":
+    # Accept a bid
+    elif request.method == "PUT":
         my_dict = request.get_json()
 
         bid_obj = storage.get(Bid, my_dict['bid_id'])
@@ -423,20 +468,6 @@ def client_home():
                 jobs[f'Job.{job.id}'] = bids_list
 
         return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
-
-    if request.method == "POST":
-        my_dict = request.get_json()
-        my_dict['client_id'] = current_user.id
-
-        if not my_dict:
-            abort(400, "Invalid input")
-
-        else:
-            job_obj = Job(**my_dict)
-            job_obj.save()
-
-        return job_obj.to_dict()
-
 
 @app.route('/client/activejobs', methods=["GET", "POST"], strict_slashes=False)
 @login_required
