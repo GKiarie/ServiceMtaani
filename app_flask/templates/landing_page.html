@@ -65,7 +65,15 @@
         </div>
       </div>
     </nav>
-    
+    {% with messages = get_flashed_messages() %}
+            {% if messages %}
+           <ul class="flash-messages bg-success text-white">
+            {% for message in messages %}
+                <li class="flash-message bg-success text-white">{{ message }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
     <!-- End Navigation Bar -->
     <!-- Hero Section -->
     <div class="hero vh-100 d-flex align-items-center" id="home">
@@ -417,18 +425,7 @@
             </div>
             
           </form>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-           <ul class="flash-messages bg-success text-white">
-            {% for message in messages %}
-                <li class="flash-message bg-success text-white">{{ message }}</li>
-                <button type="button" class="close" data-dismiss="alert">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-            {% endfor %}
-            </ul>
-            {% endif %}
-            {% endwith %}
+            
         </div>
           
     </section>
