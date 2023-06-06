@@ -37,7 +37,7 @@
           <form method="POST" id="form1">
             <div class="form-group">
               <label for="formprice">Enter Bid Amount</label>
-              <input type="number" class="form-control" name="bid_amount" id="formprice" placeholder="Amount in Ksh. eg. 5000">
+              <input required type="number" class="form-control" name="bid_amount" id="formprice" placeholder="Amount in Ksh. eg. 5000">
               <input type="hidden" name="mechanic_id" value="{{ current_user.id }}">
               <input type="hidden" id="job_id" name="job_id" class="form-control">
 
