@@ -12,6 +12,7 @@ from models.part import Part
 from models.bid import Bid
 from models.mechanic import Mechanic
 from models.client import Client
+from models.review import Review
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
@@ -52,7 +53,6 @@ def homepage():
         message.body = f"User Name: {data['full_name']}. Complaint: {data['message']}"
         mail.send(message)
         flash("Email sent successfully", category="success")
-        return jsonify({"Message": "Complaint lodged"})
     return render_template("landing_page.html")
 
 @app.route('/login/<user>', methods=["GET", "POST"], strict_slashes=False)
@@ -139,7 +139,7 @@ def user_signup(user=None):
                 return redirect('/login/mechanic')
     return render_template("signup.html")
 
-@app.route('/logout')
+@app.route('/logout', methods=["GET"])
 @login_required
 def logout():
     logout_user()
@@ -160,6 +160,8 @@ def data_post():
 def vendor_orders_route():
     """Use this route to render vendor orders"""
     vendor_obj = storage.get(Vendor, current_user.id)
+    if not vendor_obj:
+        return redirect(url_for('homepage'))
     order_list = []
     for part in vendor_obj.parts:
         for order in part.orders:
@@ -179,6 +181,8 @@ def vendor_orders_route():
 def vendor_delivered():
     """Use this route to render the vendor's delivered orders"""
     vendor_obj = storage.get(Vendor, current_user.id)
+    if not vendor_obj:
+        return redirect(url_for('homepage'))
     order_list = []
     for part in vendor_obj.parts:
         for order in part.orders:
@@ -199,6 +203,8 @@ def vendor_delivered():
 def vendor_catalogue():
     """This route will return the vendor's catalogue"""
     vendor_obj = storage.get(Vendor, current_user.id)
+    if not vendor_obj:
+        return redirect(url_for('homepage'))
     if request.method == "GET":
         return render_template("vendor_catalogue.html", items=vendor_obj.parts, current_user=current_user)
     if request.method == "POST":
@@ -239,6 +245,8 @@ def mechanic_jobs():
     if request.method == "GET":
         all_jobs = storage.openjobs()
         mech_obj = storage.get(Mechanic, current_user.id)
+        if not mech_obj:
+            return redirect(url_for('homepage'))
         for bid in mech_obj.bids:
             if bid.job in all_jobs:
                 all_jobs.remove(bid.job)
@@ -261,6 +269,8 @@ def mechanic_jobs():
 def mechanic_openbids():
     """The route will show the open jobs"""
     mech_obj = storage.get(Mechanic, current_user.id)
+    if not mech_obj:
+        return redirect(url_for('homepage'))
     bids = mech_obj.bids
     bids_dict = []
     for bid in bids:
@@ -299,6 +309,8 @@ def mechanic_openbids():
 @login_required
 def active_jobs():
     mech_obj = storage.get(Mechanic, current_user.id)
+    if not mech_obj:
+        return redirect(url_for('homepage'))
     bids = mech_obj.bids
     bids_dict = []
     for bid in bids:
@@ -320,12 +332,14 @@ def active_jobs():
 @login_required
 def completed_jobs():
     mech_obj = storage.get(Mechanic, current_user.id)
+    if not mech_obj:
+        return redirect(url_for('homepage'))
     bids = mech_obj.bids
     bids_dict = []
     for bid in bids:
         if bid.bid_status == 1:
             job_obj = storage.get(Job, bid.job_id)
-            if job_obj.job_status == 0:
+            if job_obj.job_status == 3:
                 bid_dict = {}
                 bid_dict['id'] = bid.id
                 bid_dict['bid_amount'] = bid.bid_amount
@@ -339,7 +353,15 @@ def completed_jobs():
 @login_required
 def mechanic_reviews():
     mech_obj = storage.get(Mechanic, current_user.id)
-    reviews = mech_obj.reviews
+    if not mech_obj:
+        return redirect(url_for('homepage'))
+    reviews = []
+    for review in mech_obj.reviews:
+        review_info = {}
+        review_info['Client'] = f"{review.client.first_name} {review.client.last_name}"
+        review_info['Description'] = review.description
+        review_info['Rating'] = review.rating
+        reviews.append(review_info)
     return reviews
 
 @app.route('/client', methods=["GET", "POST", "PUT", "DELETE"], strict_slashes=False)
@@ -347,6 +369,8 @@ def mechanic_reviews():
 def client_home():
     """Render the client homepage"""
     client_obj = storage.get(Client, current_user.id)
+    if not client_obj:
+        return redirect(url_for('homepage'))
     # if request.method == "GET":
     jobs = {}
     for job in client_obj.jobs:
@@ -426,13 +450,11 @@ def client_home():
                 bids_list.append(job_info)
             if job.job_status == 1:
                 jobs[f'Job.{job.id}'] = bids_list
-
-        # return redirect("/client")
         return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
 
-    # Accept a bid
     elif request.method == "PUT":
         my_dict = request.get_json()
+        print(my_dict)
 
         bid_obj = storage.get(Bid, my_dict['bid_id'])
         bid_obj.bid_status = 1
@@ -466,7 +488,6 @@ def client_home():
                 bids_list.append(job_info)
             if job.job_status == 1:
                 jobs[f'Job.{job.id}'] = bids_list
-
         return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user)
 
 @app.route('/client/activejobs', methods=["GET", "POST"], strict_slashes=False)
@@ -490,7 +511,32 @@ def client_active_jobs():
                 job_info.append(bid_info)
             jobs[f'Job.{job.id}'] = job_info
         return render_template("client_active_jobs.html", title="Client Home", jobs=jobs, current_user=current_user)
-
+    if request.method == "POST":
+        data = request.form
+        bid_obj = storage.get(Bid, data["bid_id"])
+        bid_obj.job.job_status = 3
+        bid_obj.job.save()
+        mechanic_obj = bid_obj.mechanic
+        jobs = mechanic_obj.jobs_completed
+        rated_val = int(data['ratingValue'])
+        if jobs > 0:
+            prev_rating = mechanic_obj.rating * jobs
+            jobs += 1
+            new_rating = (prev_rating + rated_val) / jobs
+        else:
+            prev_rating = mechanic_obj.rating
+            new_rating = rated_val
+        mechanic_obj.jobs_completed += 1
+        mechanic_obj.rating = new_rating
+        mechanic_obj.save()
+        review_dict = {}
+        review_dict['client_id'] = bid_obj.job.client.id
+        review_dict['mechanic_id'] = bid_obj.mechanic_id
+        review_dict['description'] = data['review']
+        review_dict['rating'] = rated_val
+        review_obj = Review(**review_dict)
+        review_obj.save()
+        return redirect(url_for('client_active_jobs'))
 
 @app.route('/client/completedjobs', methods=["GET", "POST"], strict_slashes=False)
 @login_required
@@ -520,6 +566,8 @@ def client_completed_jobs():
 @login_required
 def client_orders():
     client_obj = storage.get(Client, current_user.id)
+    if not client_obj:
+        return redirect(url_for('homepage'))
     order_list = []
     for order in client_obj.orders:
         order_info = {}

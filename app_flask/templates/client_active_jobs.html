@@ -39,7 +39,7 @@
 
 <!-- Jobs tiles section -->
 <div class="accordion" id="accordionExample">
-    <h1 id="jobs-heading">Active Jobs</h1>
+    <h3 id="jobs-heading">Active Jobs</h3>
     {% for job in jobs.values() %}
 
     <div class="card my-2 shadow-sm">
@@ -70,7 +70,7 @@
                 {% endif %}
                 {% if bid.bid_amount %}
                 <p>Bid Amount: {{ bid.bid_amount }}</p>
-                <button class="btn btn-success "  type="button" data-bid-id="{{ bid.bid_id }}" id="accept_bid">Accept Bid</button>
+                <button class="btn btn-success openReviewModalBtn"  type="button" data-id="{{ bid.bid_id }}" id="openReviewModalBtn" data-toggle="modal" data-target="#reviewJobModal">Mark as Completed</button>
                 {% endif %}
             </div>
         </div>
@@ -80,6 +80,39 @@
     {% endfor %}
 </div>
 <!-- end of tiles section -->
+
+<!-- Review Mechanic Modal -->
+<div class="modal" id="reviewJobModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5>Review the mechanic</h5>
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="ratingValue">Pick rating</label>
+                        <select class="form-control" name="ratingValue" id="ratingValue">
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                        </select>
+                      </div>
+                    <div class="form-group">
+                        <label for="job_desc">Enter review</label>
+                        <input type="text" class="form-control" id="reviewText" name="review" placeholder="Review">
+                    </div>
+                    <input type="hidden" id="bid_id" name="bid_id" class="form-control">
+                    <br><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="reviewMechBtn" type="submit" class="submitReviewBtn btn btn-primary">Submit and Close Job</button>
+            </form>
+            </div>
+        </div>
+    </div>
 </div>
+<!-- End of review mechanic modal -->
+</div>
+
+
 
 {% endblock content%}

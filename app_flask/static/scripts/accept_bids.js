@@ -7,6 +7,8 @@ $(document).ready(function() {
             // Add your data properties here
             bid_id: bidId
         };
+        console.log(data)
+        
 
         // Send an AJAX PUT request to your Flask server
         $.ajax({

@@ -11,8 +11,8 @@
     <title>Catalogue</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
-        <div class="container">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark py-3">
+        <div class="container-fluid">
           <a class="navbar-brand" href="#">
             <img src="../static/images/logo.png" alt="" width="43" height="24" class="d-inline-block align-text-top">
             Service Mtaani
@@ -26,10 +26,10 @@
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">About us</a>
+                <a class="nav-link" href="/">About us</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
+                <a class="nav-link" href="/">Contact</a>
               </li>
               {% if current_user.is_authenticated %}
               <li class="nav-item">
@@ -176,7 +176,26 @@
     </div>
 
     </div>
-
+    <footer class="bg-dark text-light py-2 fixed-bottom">
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col-sm-4">
+            <h5><a href="#about-us" class="text-light text-decoration-none">About Us</a></h5>
+          </div>
+          <div class="col-sm-4">
+            <h5><a href="#contact-us" class="text-light text-decoration-none">Contact Us</a></h5>
+          </div>
+          <div class="col-sm-4">
+            <h5><a href="#team" class="text-light text-decoration-none">Team</a></h5>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col text-center">
+            <p class="m-0">© 2023 Service Mtaani.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
