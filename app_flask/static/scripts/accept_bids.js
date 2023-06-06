@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $("#accept_bid").click(function() {
+    $(".accept_bid").click(function() {
         // Prepare the data to send
         var bidId = $(this).data("bid-id");
         // console.log("Bid ID: " + bidId);
@@ -19,6 +19,7 @@ $(document).ready(function() {
             success: function(response) {
                 // Handle the success response
                 console.log("Data sent successfully");
+                location.reload();
             },
             error: function(xhr, status, error) {
                 // Handle the error response

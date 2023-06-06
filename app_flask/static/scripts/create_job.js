@@ -114,13 +114,13 @@ $(document).ready(function() {
         // console.log("Data sent successfully");
         // Optionally, you can close the modal after successful submission
         //   $("#myModal").modal("hide");
+        location.reload();
       },
       error: function(xhr, status, error) {
         // Handle the error response
         console.error("Error sending data:", error);
       }
     });
-    location.reload(true)
   });
 
   //Delete a Job
