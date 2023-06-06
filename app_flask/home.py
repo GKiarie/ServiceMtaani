@@ -139,7 +139,7 @@ def user_signup(user=None):
                 return redirect('/login/mechanic')
     return render_template("signup.html")
 
-@app.route('/logout')
+@app.route('/logout', methods=["GET"])
 @login_required
 def logout():
     logout_user()
