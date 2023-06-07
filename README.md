@@ -1,4 +1,4 @@
-# SERVICEMTAANI
+# [SERVICEMTAANI](/README.md)
 
 The app is designed to be user-friendly and accessible to both clients and mechanics.
 
@@ -9,20 +9,75 @@ Mechanics will be able to create an account, view job requests, and bid on the j
 Additionally, the app has an online platform for selling car parts
 
 
-# [Table of Content](#)
-- [File Descriptions]()
-* [Usage]()
-- [Examples of use]()
-* [Bugs]()
-* [Authors]()
-* [License]()
+# [Table of Content](#table-of-content)
+- [File Descriptions](#file-descriptions)
+* [Usage](#usage)
+- [Examples of use](#example-of-usage)
+* [Bugs](#bugs)
+* [Authors](#authors)
+* [License](#licence)
 
-# [File Descriptions]()
+# [File Descriptions](#file-descriptions)
+## [modules/](/models/) directory contains classes used for this project:
+### [base_model.py]() - The BaseModel class from which future classes will be derived
+
+- `def __init__(self, **kwargs)` - Initialization of the base model
+- `def __str__(self)` - String representation of the BaseModel class
+- `def save(self)` - Updates the attribute updated_at with the current datetime
+- `def to_dict(self)` - returns a dictionary containing all keys/values of the instance
+- `def delete(self)` - Delete the object from the database
+- `def update(self, attr, value)` - Update the object attributes
+
+### Classes Inheriting from Base Model:
+- [bid.py](/models/bid.py)
+- [client.py](/models/client.py)
+- [image.py](/models/image.py)
+- [job.py](/models/job.py)
+- [mechanic.py](/models/mechanic.py)
+- [order.py](/models/order.py)
+- [part.py](/models/part.py)
+- [review.py](/models/review.py)
+- [vehicle.py](/models/vehicle.py)
+- [vendor.py](/models/vendor.py)
+
+## [/models/engine](/models/engine/) directory contains DBStorage class that handles database methods  :
+### [DBstorage.py](/models/engine/dbstorage.py) - Database Storage class
+Has the following methods to manage and manipulate dadabase data
+- `def __init__(self)` - Initializes mysql db
+- `def reload(self)` - Reloads data in the db
+- `def new(self, obj)` - Creates a new object
+- `def save(self)` - Commits the session to the db to save the changes
+- `def delete(self, obj=None)` - Deletes an object
+- `def close(self)` - Closes the session
+- `def all(self, cls=None)` - Retrieves all objects of a class
+- `def get(self, cls, id)` - Method to retrieve one object
+- `def find(self, cls=None, attr=None, val=None)`- Return an instance for a db entry
+- `def count(self, cls=None)` -
+        Return count of the class passed or
+        total items in db if no class is passed
+- `def openjobs(self)` - Returns a list of open jobs
+- `def query_bids(self, client_id, job_id=None)` - Returns all placed bids for client jobs
+- `def query_active_jobs(self, client_id)`- Returns all assigned jobs
+- `def query_winning_bid(self, job_id)` - Querys the winning bid from the db
+- `def query_completed_jobs(self, client_id)` - Finds the completed jobs for a client
+
+
+
+
+
+
 # [Usage]()
 # [Example of Usage]()
-# [Bugs]()
-# [Authors]()
-# [Licence]()
+# [Bugs](#bugs)
+No bugs reported
+
+# [Authors](/AUTHORS)
+List of contributers
+1. Edward Njogu <njogued@gmail.com>
+2. Isaac Kiarie <igitaukiarie@gmail.com>
+3. Jacob Mdigo <mdigojacob@gmail.com>
+# [Licence](#licence)
+
 
 
 
