@@ -13,7 +13,9 @@ from models.bid import Bid
 from models.mechanic import Mechanic
 from models.client import Client
 from models.review import Review
+from models.image import Image
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import os
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 
@@ -150,13 +152,21 @@ def logout():
 @app.route('/test', methods=["GET", "POST"], strict_slashes=False)
 def data_post():
     if request.method == "GET":
-        parts = all_parts()
-        return render_template("layout.html", parts=parts)
+        return render_template("test_route.html")
     if request.method == "POST":
-        text = request.data
-        text = text.decode('UTF-8')
-        print(text)
-        return text
+        # text = request.data
+        # text = text.decode('UTF-8')
+        # print(text)
+        # return text
+        image = request.files['img']
+        filename = secure_filename(image.filename)
+        save_path = "C://Users//user//Documents//alx-portfolio-project//ServiceMtaani//app_flask//static//images//" + filename
+        image.save(save_path)
+        print("Image saved:", filename)
+        data = request.form
+        print(data)
+        print(image)
+        return render_template("test_route.html", filename=filename)
 
 @app.route('/vendor', strict_slashes=False)
 @login_required
@@ -215,6 +225,14 @@ def vendor_catalogue():
         newdata = data.copy()
         newdata = {k: v for k, v in newdata.items() if v}
         part_obj = storage.get(Part, newdata['part_id'])
+        if 'img' in request.files:
+            image = request.files['img']
+            filename = secure_filename(image.filename)
+            filename = f"{part_obj.id}+{filename}"
+            save_path = "C://Users//user//Documents//alx-portfolio-project//ServiceMtaani//app_flask//static//images//" + filename
+            image.save(save_path)
+            image_obj = Image(part_id=part_obj.id, image_path=filename)
+            image_obj.save()
         del newdata['part_id']
         for k, v in newdata.items():
             setattr(part_obj, k, v)
@@ -238,6 +256,14 @@ def vendor_parts():
     newdata['vendor_id'] = current_user.id
     part_obj = Part(**newdata)
     part_obj.save()
+    if 'img' in request.files:
+        image = request.files['img']
+        filename = secure_filename(image.filename)
+        filename = f"{part_obj.id}+{filename}"
+        save_path = "C://Users//user//Documents//alx-portfolio-project//ServiceMtaani//app_flask//static//images//" + filename
+        image.save(save_path)
+        image_obj = Image(part_id=part_obj.id, image_path=filename)
+        image_obj.save()
     return redirect(url_for('vendor_catalogue'))
 
 
@@ -413,6 +439,10 @@ def all_parts():
         part_info["part_price"] = part.part_price
         part_info["part_vendor"] = f"{part.vendor.first_name} {part.vendor.last_name}"
         part_info["part_id"] = part.id
+        if len(part.images) > 0:
+            part_info["part_image"] = part.images[-1].image_path
+        else:
+            part_info["part_image"] = "parts_icons.jpg"
         parts.append(part_info)
     return parts
 
