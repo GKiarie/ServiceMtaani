@@ -10,9 +10,9 @@ Additionally, the app has an online platform for selling car parts
 
 
 # [Table of Content](#table-of-content)
-- [File Descriptions](#file-descriptions)
+* [File Descriptions](#file-descriptions)
 * [Usage](#usage)
-- [Examples of use](#example-of-usage)
+* [Examples of use](#example-of-usage)
 * [Bugs](#bugs)
 * [Authors](#authors)
 * [License](#licence)
