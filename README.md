@@ -66,17 +66,6 @@ Has the following methods to manage and manipulate dadabase data
 
 ## [app_flask/templates](/app_flask/templates/) - Contains html templates with jinja2 syntax
 
-<style>
-table {
-  border-collapse:collapse;
-}
-
-td {
-  border: 1px solid #000;
-  margin: 0;
-  padding: 0.5em;
-}
-</style>
 
 <table>
 <!-- Table Headers -->
