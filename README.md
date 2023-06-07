@@ -61,6 +61,27 @@ Has the following methods to manage and manipulate dadabase data
 - `def query_winning_bid(self, job_id)` - Querys the winning bid from the db
 - `def query_completed_jobs(self, client_id)` - Finds the completed jobs for a client
 
+## [app_flask/](/app_flask/) - Contains the home.py file which initializes the flask app and defines all the routes necessary for the app functionality with flask
+### [home.py](/app_flask/home.py) - Initializes flask app and defines other methods for specific routes
+## [app_flask/templates](/app_flask/templates/) - Contains html templates with jinja2 syntax
+## [app_flask/static](/app_flask/static/)
+- ### [app_flask/static/images](/app_flask/static/images) - Contains static image files
+- ### [app_flask/static/scripts](/app_flask/static/scripts) - Contains static js files with jQuery syntax
+    - [accept_bids.js](app_flask/static/scripts/accept_bids.js)
+        - Accept bid by client
+        - Delete bid by mechanic
+    - [create_job.js](app_flask/static/scripts/create_job.js)
+    - [deletepart.js](app_flask/static/scripts/deletepart.js)
+    - [hide_blog.js](app_flask/static/scripts/hide_blog.js)
+    - [mechanic_homepage.js](app_flask/static/scripts/mechanic_homepage.js)
+    - [modal_bid.js](app_flask/static/scripts/modal_bid.js)
+    - [ordered_parts.js](app_flask/static/scripts/ordered_parts.js)
+    - [review_job.js](app_flask/static/scripts/review_job.js)
+- ### [app_flask/static/styles](/app_flask/static/styles) - Contains static css styling files
+    - [button.css](/app_flask/static/styles/button.css) - Buttons styles
+    - [main.css](/app_flask/static/styles/main.css) - Landing page styles
+    - [styles.css](/app_flask/static/styles/styles.css) - General body styles
+    - [vendor_footer.css](/app_flask/static/styles/vendor_footer.css) - Vendor footer styles
 
 
 
