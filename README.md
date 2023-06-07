@@ -1,4 +1,4 @@
-SERVICEMTAANI
+# SERVICEMTAANI
 
 The app is designed to be user-friendly and accessible to both clients and mechanics.
 
@@ -8,13 +8,23 @@ Mechanics will be able to create an account, view job requests, and bid on the j
 
 Additionally, the app has an online platform for selling car parts
 
-Table of Content
-*File Descriptions
-*Usage
-*Examples of use
-*Bugs
-*Authors
-*License
+
+# [Table of Content](#)
+- [File Descriptions]()
+* [Usage]()
+- [Examples of use]()
+* [Bugs]()
+* [Authors]()
+* [License]()
+
+# [File Descriptions]()
+# [Usage]()
+# [Example of Usage]()
+# [Bugs]()
+# [Authors]()
+# [Licence]()
+
+
 
 
 
