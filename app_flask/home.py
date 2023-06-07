@@ -423,7 +423,7 @@ def client_home():
     client_obj = storage.get(Client, current_user.id)
     parts = all_parts()
     if not client_obj:
-        return redirect(url_for('homepage')) 
+        return redirect(url_for('homepage'))
 
     if request.method == "GET":
         jobs = open_jobs(current_user.id)
@@ -533,23 +533,41 @@ def client_completed_jobs():
 @login_required
 def client_orders():
     client_obj = storage.get(Client, current_user.id)
+
     parts = all_parts()
     if not client_obj:
         return redirect(url_for('homepage'))
     order_list = []
     for order in client_obj.orders:
         order_info = {}
-        order_info['order_id'] = order.id
-        order_info['order_part_name'] = order.parts[0].part_name
-        order_info['order_part_description'] = order.parts[0].part_description
-        order_info['vendor_name'] = f'{order.parts[0].vendor.first_name} {order.parts[0].vendor.last_name}'
-        order_info['vendor_phone_number'] = order.parts[0].vendor.phone_number
-        order_info['part_price'] = order.parts[0].part_price
-        order_list.append(order_info)
+        if len(order.parts) != 0:
+            order_info['order_id'] = order.id
+            order_info['order_part_id'] = order.parts[0].id
+            order_info['order_part_name'] = order.parts[0].part_name
+            order_info['order_part_description'] = order.parts[0].part_description
+            order_info['vendor_name'] = f'{order.parts[0].vendor.first_name} {order.parts[0].vendor.last_name}'
+            order_info['vendor_phone_number'] = order.parts[0].vendor.phone_number
+            order_info['part_price'] = order.parts[0].part_price
+            order_list.append(order_info)
     # print(order_list)
     # return order_list
     if request.method == 'GET':
+        # return order_list
         return render_template("client_orders.html", title="Client Home", orders=order_list, current_user=current_user, parts=parts)
+
+    # create a client new order
+    if request.method == 'POST':
+        my_dict = request.get_json()
+        part_obj = storage.get(Part, my_dict['part_id'])
+        # part_id = my_dict['part_id']
+        my_dict["client_id"] = current_user.id
+        print(my_dict)
+        order = Order(**my_dict)
+        order.parts.append(part_obj)
+        order.save()
+        print(order.to_dict())
+        # return order.parts[0].to_dict()
+        return redirect("/client/myorders")
 
 
 if __name__ == "__main__":
