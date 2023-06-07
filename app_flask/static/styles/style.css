@@ -1,6 +1,5 @@
 body {
     background-color:#cdcdcd;
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
 }
 
 /* Hide the vertical scroll bar */
@@ -36,4 +35,56 @@ body h1, h2, h3, h4, h5, h6 {
     left: 0;
     right: 0;
 }
+/* Mechanic Job Tiles */
+.job-tiles {
+    height: 100%; /*tiles to stretch to march the largest in height*/
+}
+.job-tiles h2 {
+    background-color:#f8f8f8;
+    font-size: 2vw;
+    padding: 2px;
+    width: 100%;
+    letter-spacing: 1.5px;
+    text-align: center;
+    text-transform: uppercase;
+}
 
+.job-tiles p {
+    width: 100%;
+    letter-spacing: 1px;
+    text-align: justify;
+    margin: 0;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-weight: 500;
+
+}
+.job-tiles:hover{
+    background-color: #cdcdcd;
+}
+.job-tiles:hover h2{
+    background-color: #21252f;
+    color: #ffffff;
+}
+
+.job-tiles button{
+    color: #212226;
+    border: 1px solid #212226;
+}
+
+.job-tiles button:hover{
+    color: #ffffff;
+    background-color: rgb(83, 83, 81);
+    border: 1px solid rgb(83, 83, 81);
+}
+
+.job-tiles,
+.job-tiles h2,
+.job-tiles p,
+.job-tiles button {
+     transition: all 700ms linear;
+    -webkit-transition: all 700ms linear;
+    -moz-transition: all 700ms linear;
+    -ms-transition: all 700ms linear;
+    -o-transition: all 700ms linear;
+}
