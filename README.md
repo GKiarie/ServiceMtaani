@@ -76,7 +76,8 @@ List of contributers
 1. Edward Njogu <njogued@gmail.com>
 2. Isaac Kiarie <igitaukiarie@gmail.com>
 3. Jacob Mdigo <mdigojacob@gmail.com>
-# [Licence](#licence)
+# [License](/LICENSE)
+Licensed by MIT
 
 
 
