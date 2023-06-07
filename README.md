@@ -73,9 +73,9 @@ No bugs reported
 
 # [Authors](/AUTHORS)
 List of contributers
-1. Edward Njogu <njogued@gmail.com>
-2. Isaac Kiarie <igitaukiarie@gmail.com>
-3. Jacob Mdigo <mdigojacob@gmail.com>
+1. Edward Njogu | <njogued@gmail.com> | [Github](https://github.com/njogued)
+2. Isaac Kiarie | <igitaukiarie@gmail.com> | [Github](https://github.com/GKiarie)
+3. Jacob Mdigo | <mdigojacob@gmail.com> | [Github](https://github.com/Mdigo12)
 # [License](/LICENSE)
 Licensed by MIT
 
