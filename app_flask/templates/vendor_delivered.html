@@ -9,6 +9,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <title>Delivered Orders</title>
+    <style>
+      .bottom-footer {
+        position: relative;
+        bottom:0;
+        width:100%;
+        height:40px;   /* Height of the footer */
+        background:rgba(9, 78, 226, 0.226);
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark py-3">
@@ -73,7 +82,7 @@
         <h3>Delivered orders</h3>
     </div>
     </div>
-    <div class="container">
+    <div class="container mb-5">
     <div class="accordion" id="accordionExample">
     {% for order in orders %}
     <div class="accordion-item">
@@ -97,7 +106,7 @@
     </div>
     </div>
 
-    <footer class="bg-dark text-light py-2 fixed-bottom">
+    <footer class="bg-dark text-light py-2 fixed-bottom bottom-footer">
       <div class="container">
         <div class="row">
           <div class="col-sm-4">
