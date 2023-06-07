@@ -1,5 +1,6 @@
 body {
-    background-color:#cdcdcd;
+    background-color: #f9f9fa
+    /* background-color:#cdcdcd; */
 }
 
 /* Hide the vertical scroll bar */
@@ -82,9 +83,52 @@ body h1, h2, h3, h4, h5, h6 {
 .job-tiles h2,
 .job-tiles p,
 .job-tiles button {
-     transition: all 700ms linear;
+    transition: all 700ms linear;
     -webkit-transition: all 700ms linear;
     -moz-transition: all 700ms linear;
     -ms-transition: all 700ms linear;
     -o-transition: all 700ms linear;
+}
+
+.owl-carousel .item{
+    margin: 3px;
+}
+.owl-carousel .item img{
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.owl-carousel .item {
+    margin: 3px;
+}
+
+.owl-carousel{
+    margin-bottom:15px;
+}
+.stretch-card>.card {
+    width: 100%;
+    min-width: 100%
+}
+
+.flex {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto
+}
+
+@media (max-width:991.98px) {
+    .padding {
+        padding: 1.5rem
+    }
+}
+
+@media (max-width:767.98px) {
+    .padding {
+        padding: 1rem
+    }
+}
+
+.padding {
+    padding: 3rem
 }

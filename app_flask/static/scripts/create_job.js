@@ -126,9 +126,6 @@ $(document).ready(function() {
   //Delete a Job
   $(".btn-delete").click(function(){
     var job_id = $(this).data("job-id");
-    // console.log("We are here");
-    // console.log("Job Id:" + job_id);
-
     var data = {job_id: job_id};
 
     $.ajax({

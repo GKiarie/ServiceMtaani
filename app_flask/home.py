@@ -13,7 +13,9 @@ from models.bid import Bid
 from models.mechanic import Mechanic
 from models.client import Client
 from models.review import Review
+from models.image import Image
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import os
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 
@@ -150,13 +152,21 @@ def logout():
 @app.route('/test', methods=["GET", "POST"], strict_slashes=False)
 def data_post():
     if request.method == "GET":
-        parts = all_parts()
-        return render_template("layout.html", parts=parts)
+        return render_template("test_route.html")
     if request.method == "POST":
-        text = request.data
-        text = text.decode('UTF-8')
-        print(text)
-        return text
+        # text = request.data
+        # text = text.decode('UTF-8')
+        # print(text)
+        # return text
+        image = request.files['img']
+        filename = secure_filename(image.filename)
+        save_path = "C://Users//user//Documents//alx-portfolio-project//ServiceMtaani//app_flask//static//images//" + filename
+        image.save(save_path)
+        print("Image saved:", filename)
+        data = request.form
+        print(data)
+        print(image)
+        return render_template("test_route.html", filename=filename)
 
 @app.route('/vendor', strict_slashes=False)
 @login_required
@@ -215,6 +225,14 @@ def vendor_catalogue():
         newdata = data.copy()
         newdata = {k: v for k, v in newdata.items() if v}
         part_obj = storage.get(Part, newdata['part_id'])
+        if 'img' in request.files:
+            image = request.files['img']
+            filename = secure_filename(image.filename)
+            filename = f"{part_obj.id}+{filename}"
+            save_path = "C://Users//user//Documents//alx-portfolio-project//ServiceMtaani//app_flask//static//images//" + filename
+            image.save(save_path)
+            image_obj = Image(part_id=part_obj.id, image_path=filename)
+            image_obj.save()
         del newdata['part_id']
         for k, v in newdata.items():
             setattr(part_obj, k, v)
@@ -238,6 +256,14 @@ def vendor_parts():
     newdata['vendor_id'] = current_user.id
     part_obj = Part(**newdata)
     part_obj.save()
+    if 'img' in request.files:
+        image = request.files['img']
+        filename = secure_filename(image.filename)
+        filename = f"{part_obj.id}+{filename}"
+        save_path = "C://Users//user//Documents//alx-portfolio-project//ServiceMtaani//app_flask//static//images//" + filename
+        image.save(save_path)
+        image_obj = Image(part_id=part_obj.id, image_path=filename)
+        image_obj.save()
     return redirect(url_for('vendor_catalogue'))
 
 
@@ -413,6 +439,10 @@ def all_parts():
         part_info["part_price"] = part.part_price
         part_info["part_vendor"] = f"{part.vendor.first_name} {part.vendor.last_name}"
         part_info["part_id"] = part.id
+        if len(part.images) > 0:
+            part_info["part_image"] = part.images[-1].image_path
+        else:
+            part_info["part_image"] = "parts_icons.jpg"
         parts.append(part_info)
     return parts
 
@@ -423,7 +453,7 @@ def client_home():
     client_obj = storage.get(Client, current_user.id)
     parts = all_parts()
     if not client_obj:
-        return redirect(url_for('homepage')) 
+        return redirect(url_for('homepage'))
 
     if request.method == "GET":
         jobs = open_jobs(current_user.id)
@@ -533,23 +563,41 @@ def client_completed_jobs():
 @login_required
 def client_orders():
     client_obj = storage.get(Client, current_user.id)
+
     parts = all_parts()
     if not client_obj:
         return redirect(url_for('homepage'))
     order_list = []
     for order in client_obj.orders:
         order_info = {}
-        order_info['order_id'] = order.id
-        order_info['order_part_name'] = order.parts[0].part_name
-        order_info['order_part_description'] = order.parts[0].part_description
-        order_info['vendor_name'] = f'{order.parts[0].vendor.first_name} {order.parts[0].vendor.last_name}'
-        order_info['vendor_phone_number'] = order.parts[0].vendor.phone_number
-        order_info['part_price'] = order.parts[0].part_price
-        order_list.append(order_info)
+        if len(order.parts) != 0:
+            order_info['order_id'] = order.id
+            order_info['order_part_id'] = order.parts[0].id
+            order_info['order_part_name'] = order.parts[0].part_name
+            order_info['order_part_description'] = order.parts[0].part_description
+            order_info['vendor_name'] = f'{order.parts[0].vendor.first_name} {order.parts[0].vendor.last_name}'
+            order_info['vendor_phone_number'] = order.parts[0].vendor.phone_number
+            order_info['part_price'] = order.parts[0].part_price
+            order_list.append(order_info)
     # print(order_list)
     # return order_list
     if request.method == 'GET':
+        # return order_list
         return render_template("client_orders.html", title="Client Home", orders=order_list, current_user=current_user, parts=parts)
+
+    # create a client new order
+    if request.method == 'POST':
+        my_dict = request.get_json()
+        part_obj = storage.get(Part, my_dict['part_id'])
+        # part_id = my_dict['part_id']
+        my_dict["client_id"] = current_user.id
+        print(my_dict)
+        order = Order(**my_dict)
+        order.parts.append(part_obj)
+        order.save()
+        print(order.to_dict())
+        # return order.parts[0].to_dict()
+        return redirect("/client/myorders")
 
 
 if __name__ == "__main__":

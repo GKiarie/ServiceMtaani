@@ -42,10 +42,11 @@
     <h1 id="jobs-heading">Open Jobs</h1>
 
     {% for job in jobs.values() %}
+    {% set card_index = loop.index %}
     <div class="card my-2 shadow-sm">
-      <div class="card-header row d-flex justify-content-between" id="headingOne">
+      <div class="card-header row d-flex justify-content-between" id="heading{{card_index}}">
         <h2 class="mb-0 col-md-9">
-          <button class="btn btn-block text-left accordionBtn d-flex align-items-center justify-content-between"  type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <button class="btn btn-block text-left accordionBtn d-flex align-items-center justify-content-between"  type="button" data-toggle="collapse" data-target="#collapse{{card_index}}" aria-expanded="true" aria-controls="collapse{{card_index}}">
             <p>Job #{{loop.index}} - {{job[0].job_title}} </p>
             <i class="fa-solid fa-chevron-down fa-shake fa-lg"></i>
           </button>
@@ -59,7 +60,7 @@
       </div>
 
       {% for bid in job %}
-      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div id="collapse{{card_index}}" class="collapse" aria-labelledby="heading{{card_index}}" data-parent="#accordionExample">
         <div class="card-body">
 
           {% if bid.mechanic_name %}
