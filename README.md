@@ -62,8 +62,124 @@ Has the following methods to manage and manipulate dadabase data
 - `def query_completed_jobs(self, client_id)` - Finds the completed jobs for a client
 
 ## [app_flask/](/app_flask/) - Contains the home.py file which initializes the flask app and defines all the routes necessary for the app functionality with flask
-### [home.py](/app_flask/home.py) - Initializes flask app and defines other methods for specific routes
+### [home.py](/app_flask/home.py) - Initializes flask app and defines other methods for specific routes which listens to http requests
+
 ## [app_flask/templates](/app_flask/templates/) - Contains html templates with jinja2 syntax
+
+<style>
+table {
+  border-collapse:collapse;
+}
+
+td {
+  border: 1px solid #000;
+  margin: 0;
+  padding: 0.5em;
+}
+</style>
+
+<table>
+<!-- Table Headers -->
+  <tr>
+    <td colspan="4">
+      <h3>Users</h3>
+    </td>
+    <td colspan="4">
+      <h3>Pages</h3>
+    </td>
+    <td colspan="4">
+      <h3>Usage</h3>
+    </td>
+  </tr>
+  <!-- Table Headers End -->
+  <tr>
+    <td colspan="4">
+      Client
+    </td>
+    <td colspan="4">
+      <ul>
+      <li>client_homepage.html</li>
+      <li>client_active_jobs.html</li>
+      <li>client_completed_jobs.html</li>
+      <li>client_orders.html</li>
+      </ul>
+    </td>
+    <td colspan="4">
+      <ul>
+      <li>Shows as the client's home page </li>
+      <li>Shows client's active jobs </li>
+      <li>Shows client's completed jobs </li>
+      <li>Shows client's orders </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4">
+      Mechanic
+    </td>
+    <td colspan="4">
+      <ul>
+      <li>mechanic_homepage.html</li>
+      <li>mechanic_active_jobs.html</li>
+      <li>mechanic_completed_jobs.html</li>
+      <li>mechanic_bids.html</li>
+      </ul>
+    </td>
+    <td colspan="4">
+      <ul>
+      <li>Shows as the mechanic home page </li>
+      <li>Shows mechanic's active jobs </li>
+      <li>Shows mechanic's completed jobs </li>
+      <li>Shows mechanic's open bids </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4">
+    Vendor
+    </td>
+    <td colspan="4">
+    <ul>
+      <li>vendor.html</li>
+      <li>vendor_catalogue.html</li>
+      <li>vendor_delivered.html</li>
+      <li>vendor_orders.html</li>
+      </ul>
+    </td>
+    <td colspan="4">
+    <ul>
+      <li>Shows as the vendor's home page </li>
+       <li>Shows vendor's catalogue </li>
+      <li>Shows vendor's delivered orders </li>
+      <li>Shows vendor's orders </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4">
+    General Templates
+    </td>
+    <td colspan="4">
+        <ul>
+            <li>layout.html</li>
+            <li>base.html</li>
+            <li>landing_page.html</li>
+            <li>login.html</li>
+            <li>signup.html</li>
+        </ul>
+    </td>
+    <td colspan="4">
+        <ul>
+            <li>layout.html: Base Layout</li>
+            <li>base.html: Base Layout</li>
+            <li>landing_page.html: Default page /</li>
+            <li>login.html: Loging in Page</li>
+            <li>signup.html: Signing up Page</li>
+        </ul>
+    </td>
+  </tr>
+</table>
+
 ## [app_flask/static](/app_flask/static/)
 - ### [app_flask/static/images](/app_flask/static/images) - Contains static image files
 - ### [app_flask/static/scripts](/app_flask/static/scripts) - Contains static js files with jQuery syntax
@@ -84,13 +200,10 @@ Has the following methods to manage and manipulate dadabase data
     - [vendor_footer.css](/app_flask/static/styles/vendor_footer.css) - Vendor footer styles
 
 
-
-
-
-# [Usage]()
-# [Example of Usage]()
+<!-- # [Usage]()
+# [Example of Usage]() -->
 # [Bugs](#bugs)
-No bugs reported
+No bugs reported yet.
 
 # [Authors](/AUTHORS)
 List of contributers
