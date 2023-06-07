@@ -251,7 +251,8 @@ form .form-control {
     color: var(--body);
 }
 
-.footer-top a:hover {
+.service:hover h5, 
+.service:hover p {
     color: #fff;
 }
 
