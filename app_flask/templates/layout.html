@@ -43,14 +43,14 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a id="home-link" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a id="home-link" class="nav-link" href="{{ url_for(current_user.__class__.__name__) }}">Home <span class="sr-only">(current)</span></a>
           </li>
           <!-- <li class="nav-item">
             <a class="nav-link" href="#">About Us</a>
           </li> -->
-          <div class="hidden">
+          <!-- <div class="hidden">
             {{ role }}
-          </div>
+          </div> -->
 
           <li class="nav-item">
             <a class="nav-link" href="#contact">Contact Us</a>
@@ -190,24 +190,5 @@
       });
     </script>
     <!-- jQuery script -->
-<script>
-  $(document).ready(function() {
-    // Handle click event for home link
-    $('#home-link').click(function(e) {
-      e.preventDefault();  // Prevent the default link behavior
-      
-      // Perform redirection based on the user's role
-      var role = "{{ role }}"
-      console.log(role);
-      if (role === 'client') {
-        window.location.href = '/client';
-      } else if (role === 'mechanic') {
-        window.location.href = '/mechanic';
-      } else if (role === 'vendor') {
-        window.location.href = '/vendor';
-      }
-    });
-  });
-  </script>
   </body>
   </html>
