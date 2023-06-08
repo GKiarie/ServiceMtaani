@@ -10,9 +10,9 @@ Additionally, the app has an online platform for selling car parts
 
 
 # [Table of Content](#table-of-content)
-- [File Descriptions](#file-descriptions)
+* [File Descriptions](#file-descriptions)
 * [Usage](#usage)
-- [Examples of use](#example-of-usage)
+* [Examples of use](#example-of-usage)
 * [Bugs](#bugs)
 * [Authors](#authors)
 * [License](#licence)
@@ -66,17 +66,6 @@ Has the following methods to manage and manipulate dadabase data
 
 ## [app_flask/templates](/app_flask/templates/) - Contains html templates with jinja2 syntax
 
-<style>
-table {
-  border-collapse:collapse;
-}
-
-td {
-  border: 1px solid #000;
-  margin: 0;
-  padding: 0.5em;
-}
-</style>
 
 <table>
 <!-- Table Headers -->
