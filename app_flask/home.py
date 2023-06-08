@@ -168,7 +168,7 @@ def data_post():
         print(image)
         return render_template("test_route.html", filename=filename)
 
-@app.route('/vendor', strict_slashes=False)
+@app.route('/vendor', strict_slashes=False, endpoint='Vendor')
 @login_required
 def vendor_orders_route():
     """Use this route to render vendor orders"""
@@ -267,7 +267,7 @@ def vendor_parts():
     return redirect(url_for('vendor_catalogue'))
 
 
-@app.route('/mechanic/', methods=['GET', 'POST'], strict_slashes=False)
+@app.route('/mechanic/', methods=['GET', 'POST'], strict_slashes=False, endpoint='Mechanic')
 @login_required
 def mechanic_jobs():
     parts = all_parts()
@@ -446,7 +446,7 @@ def all_parts():
         parts.append(part_info)
     return parts
 
-@app.route('/client', methods=["GET", "POST", "PUT", "DELETE"], strict_slashes=False)
+@app.route('/client', methods=["GET", "POST", "PUT", "DELETE"], strict_slashes=False, endpoint='Client')
 @login_required
 def client_home():
     """Render the client homepage"""
@@ -483,7 +483,7 @@ def client_home():
         bid_obj.save()
         bid_obj.job.save()
         jobs = open_jobs(current_user.id)
-    return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user, parts=parts)
+    return render_template("client_homepage.html", title="Client Home", jobs=jobs, current_user=current_user, parts=parts, role='client')
 
 @app.route('/client/activejobs', methods=["GET", "POST"], strict_slashes=False)
 @login_required
