@@ -18,7 +18,42 @@ box-shadow: none !important;
   color: #21252f;
   text-decoration: none;
 }
- 
+
 .footer a:hover {
   color: aqua;
+}
+
+.btn-general {
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border: 1px solid #212226;
+  background-color: #ffffff;
+  text-transform: uppercase;
+  margin: 0 5px;
+  padding: 2px 4px 2px 4px;
+  transition: all .5s;
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  -ms-transition: all .5s;
+  -o-transition: all .5s;
+}
+.btn-general:hover {
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  color: #ffffff ;
+  background-color:  #212226;
+  text-transform: uppercase;
+  margin: 0 5px;
+  padding: 2px 4px 2px 4px;
+  transition: all .5s;
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  -ms-transition: all .5s;
+  -o-transition: all .5s;
 }
