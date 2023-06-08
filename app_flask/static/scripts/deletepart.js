@@ -12,6 +12,7 @@ $(document).on("click", ".deleteVendorPart", function () {
         success: function(response) {
                 // Handle the success response
                 console.log("Part deleted successfully");
+                location.reload(true);
                 // Optionally, you can close the modal after successful submission
                 //   $("#myModal").modal("hide");
                 },
@@ -20,5 +21,5 @@ $(document).on("click", ".deleteVendorPart", function () {
                 console.error("Error sending data:", error);
                 }
     });
-    location.reload(true);
+
 });

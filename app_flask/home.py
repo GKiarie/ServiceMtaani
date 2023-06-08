@@ -260,7 +260,7 @@ def vendor_parts():
         image = request.files['img']
         filename = secure_filename(image.filename)
         filename = f"{part_obj.id}+{filename}"
-        save_path = "C://Users//user//Documents//alx-portfolio-project//ServiceMtaani//app_flask//static//images//" + filename
+        save_path = "/home/jake/alx/ServiceMtaani/app_flask/static/images/" + filename
         image.save(save_path)
         image_obj = Image(part_id=part_obj.id, image_path=filename)
         image_obj.save()

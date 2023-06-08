@@ -7,7 +7,7 @@ body {
 body::-webkit-scrollbar,
 body::-webkit-scrollbar-track,
 body::-webkit-scrollbar-thumb{
-    width: 0.5em;
+    width: 0em;
     background-color: transparent;
     background-color: transparent;
 }
