@@ -6,7 +6,7 @@ $(document).ready(function() {
       smartSpeed: 700,
       dots:false,
       autoplay:true,
-      autoplayHoverPause:true,
+      // autoplayHoverPause:true,
       loop:true,
       responsive: {
         600: {
@@ -15,12 +15,9 @@ $(document).ready(function() {
       }
     });
 
-    // $(".btnStopOwlCarousel").click(function(){
-    //   owl.trigger('stop.owl.autoplay');
-    //    if ($(".btnStopOwlCarousel").text() === "STOP"){
-    //     console.log("Is Stop");
-    //     $(".btnStopOwlCarousel").text("PLAY");
-    //    };
-    //   //  $(".btnStopOwlCarousel").text("STOP");
-    // })
+    $(".btnPlayOwlCarousel").click(function(){
+      console.log("btnClicked");
+      owl.trigger('play.owl.autoplay', [1000]);
+
+    })
   });

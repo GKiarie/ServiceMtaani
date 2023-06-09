@@ -90,21 +90,55 @@ body h1, h2, h3, h4, h5, h6 {
     -o-transition: all 700ms linear;
 }
 
-.owl-carousel .item:hover{
-    opacity: 1;
-    color: red;
-}
-
-.owl-carousel{
-    margin-left: 15px;
-    margin-bottom:15px;
-}
 
 .flex {
     /* -webkit-box-flex: 1;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto */
 }
+
+ /* Owl carousel items */
+
+.featuredItem {
+    margin: 5px;
+    height: 100%;
+    position: relative;
+}
+.featuredItem img {
+    max-width: 100%;
+    height: 200px!important;
+    background-repeat: no-repeat;
+}
+.part-info {
+    white-space: nowrap;
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    overflow: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+.partOverlay {
+    background-color: rgba(33, 34, 38, 0.9);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 700ms linear;
+    -webkit-transition: all 700ms linear;
+    -moz-transition: all 700ms linear;
+    -ms-transition: all 700ms linear;
+    -o-transition: all 700ms linear;
+}
+.featuredItem:hover .partOverlay {
+    opacity: 1;
+}
+
 
 @media (max-width:991.98px) {
     .padding {
