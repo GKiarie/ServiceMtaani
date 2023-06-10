@@ -143,7 +143,7 @@ def user_signup(user=None):
             return redirect(url_for('homepage'))
     return render_template("signup.html")
 
-@app.route('/logout', methods=["GET"])
+@app.route('/logout', methods=["GET"], strict_slashes=False)
 @login_required
 def logout():
     logout_user()
@@ -160,7 +160,7 @@ def data_post():
         # return text
         image = request.files['img']
         filename = secure_filename(image.filename)
-        save_path = "C://Users//user//Documents//alx-portfolio-project//ServiceMtaani//app_flask//static//images//" + filename
+        save_path = "/ServiceMtaani/app_flask/static/images" + filename
         image.save(save_path)
         print("Image saved:", filename)
         data = request.form
@@ -225,11 +225,11 @@ def vendor_catalogue():
         newdata = data.copy()
         newdata = {k: v for k, v in newdata.items() if v}
         part_obj = storage.get(Part, newdata['part_id'])
-        if 'img' in request.files:
+        if request.files.get('img').filename:
             image = request.files['img']
             filename = secure_filename(image.filename)
             filename = f"{part_obj.id}+{filename}"
-            save_path = "C://Users//user//Documents//alx-portfolio-project//ServiceMtaani//app_flask//static//images//" + filename
+            save_path = "/ServiceMtaani/app_flask/static/images/" + filename
             image.save(save_path)
             image_obj = Image(part_id=part_obj.id, image_path=filename)
             image_obj.save()
@@ -247,23 +247,24 @@ def vendor_catalogue():
         # return data
         return jsonify({'message': 'Part deleted successfully'}), 200
 
-@app.route('/add_new_part', methods=['GET', 'POST'])
+@app.route('/add_new_part/', methods=['GET', 'POST'], strict_slashes=False)
 def vendor_parts():
     """Take in new part and add to db"""
-    data = request.form
-    newdata = data.copy()
-    newdata = {k: v for k, v in newdata.items() if v}
-    newdata['vendor_id'] = current_user.id
-    part_obj = Part(**newdata)
-    part_obj.save()
-    if 'img' in request.files:
-        image = request.files['img']
-        filename = secure_filename(image.filename)
-        filename = f"{part_obj.id}+{filename}"
-        save_path = "/home/jake/alx/ServiceMtaani/app_flask/static/images/" + filename
-        image.save(save_path)
-        image_obj = Image(part_id=part_obj.id, image_path=filename)
-        image_obj.save()
+    if request.method == "POST":
+        data = request.form
+        newdata = data.copy()
+        newdata = {k: v for k, v in newdata.items() if v}
+        newdata['vendor_id'] = current_user.id
+        part_obj = Part(**newdata)
+        part_obj.save()
+        if request.files.get('img').filename:
+            image = request.files['img']
+            filename = secure_filename(image.filename)
+            filename = f"{part_obj.id}+{filename}"
+            save_path = "/ServiceMtaani/app_flask/static/images/" + filename
+            image.save(save_path)
+            image_obj = Image(part_id=part_obj.id, image_path=filename)
+            image_obj.save()
     return redirect(url_for('vendor_catalogue'))
 
 
@@ -466,7 +467,10 @@ def client_home():
         jobs = open_jobs(current_user.id)
     elif request.method == "POST":
         """Create a Job"""
+        print("Sending data")
         my_dict = request.get_json()
+        print("Dictionary sent")
+        print(my_dict)
         my_dict['client_id'] = current_user.id
         if not my_dict:
             abort(400, "Invalid input")

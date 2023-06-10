@@ -105,7 +105,7 @@ $(document).ready(function() {
 
     // Send an AJAX POST request to your Flask server
     $.ajax({
-      url: "/client",  // Replace with your Flask route to handle the submission
+      url: "/client/",  // Replace with your Flask route to handle the submission
       method: "POST",
       data: JSON.stringify(data),
       contentType: "application/json",
@@ -115,6 +115,7 @@ $(document).ready(function() {
         // Optionally, you can close the modal after successful submission
         //   $("#myModal").modal("hide");
         location.reload();
+	//console.log(data);
       },
       error: function(xhr, status, error) {
         // Handle the error response
