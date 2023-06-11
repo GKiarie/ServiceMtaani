@@ -35,10 +35,7 @@
             <a class="nav-link" href="#contact">Contact Us</a>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        
         <form class="form-inline my-2 my-lg-0">
           <button id="logout-btn" class="btn btn-outline-danger my-2 ml-sm-2" type="submit">Log Out</button>
         </form>
@@ -52,8 +49,14 @@
     <div class="card" style="background-color: #f9f9fa;">
       <div class="card-body">
         <div class="row">
-          <div class="col"><h4 class="card-title">Featured Parts</h4> </div>
-          <div class="col"><span class="top float-right"><button class="btnPlayOwlCarousel btn-general">Play</button></span></div>
+          <div class="col-5"><h4 class="card-title">Featured Parts</h4> </div>
+          <div class="col-5">
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" id="search-item" aria-label="Search" onkeyup="search()">
+            <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+          </form>
+          </div>
+          <div class="col-2"><span class="top float-right"><button class="btnPlayOwlCarousel btn-general">Play</button></span></div>
         </div>
       </div>
       <div class="container owl-carousel" id="featuredParts">
@@ -64,11 +67,12 @@
             <!-- </div> -->
             <div class="partOverlay">
               <div class="part-info">
-                <p>Part: {{ part.part_name }}<br>Price: Ksh. {{part.part_price}}</p>
+                <!-- <p>Part: {{ part.part_name }}<br>Price: Ksh. {{part.part_price}}</p> -->
+                <p><h6 class="name" style="margin-bottom: 0;padding-bottom: 0;font-size: small;">Part: {{ part.part_name }}</h6><br><h6 class="price" style="font-size:small;margin-top: 0;padding-top: 0;">Price: Ksh. {{part.part_price}}</h6></p>
                 <a class="btn btn-general orderPartBtn" data-part-id="{{part.part_id}}">Order this part</a>
               </div>
             </div>
-          </div>
+          </div> 
           {% endfor %}
         </div>
 
@@ -134,5 +138,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.js"></script>
     <script src="../static/scripts/owlcarousel.js"></script>
+    <script src="../static/scripts/search.js"></script>
+    
   </body>
   </html>
