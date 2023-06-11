@@ -261,7 +261,8 @@ def vendor_parts():
             image = request.files['img']
             filename = secure_filename(image.filename)
             filename = f"{part_obj.id}+{filename}"
-            save_path = "/ServiceMtaani/app_flask/static/images/" + filename
+            # save_path = "/ServiceMtaani/app_flask/static/images/" + filename
+            save_path = "/home/gitau/ServiceMtaani/app_flask/static/images/" + filename
             image.save(save_path)
             image_obj = Image(part_id=part_obj.id, image_path=filename)
             image_obj.save()
@@ -602,6 +603,48 @@ def client_orders():
         print(order.to_dict())
         # return order.parts[0].to_dict()
         return redirect("/client/myorders")
+    
+    
+# mechanics myorders route
+@app.route('/mechanic/myorders', methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def mech_orders():
+    mech_obj = storage.get(Mechanic, current_user.id)
+
+    parts = all_parts()
+    if not mech_obj:
+        return redirect(url_for('homepage'))
+    order_list = []
+    for order in mech_obj.orders:
+        order_info = {}
+        if len(order.parts) != 0:
+            order_info['order_id'] = order.id
+            order_info['order_part_id'] = order.parts[0].id
+            order_info['order_part_name'] = order.parts[0].part_name
+            order_info['order_part_description'] = order.parts[0].part_description
+            order_info['vendor_name'] = f'{order.parts[0].vendor.first_name} {order.parts[0].vendor.last_name}'
+            order_info['vendor_phone_number'] = order.parts[0].vendor.phone_number
+            order_info['part_price'] = order.parts[0].part_price
+            order_list.append(order_info)
+    # print(order_list)
+    # return order_list
+    if request.method == 'GET':
+        # return order_list
+        return render_template("mechanic_orders.html", title="Mechanic Home", orders=order_list, current_user=current_user, parts=parts)
+
+    # create a client new order
+    if request.method == 'POST':
+        my_dict = request.get_json()
+        part_obj = storage.get(Part, my_dict['part_id'])
+        # part_id = my_dict['part_id']
+        my_dict["mechanic_id"] = current_user.id
+        print(my_dict)
+        order = Order(**my_dict)
+        order.parts.append(part_obj)
+        order.save()
+        print(order.to_dict())
+        # return order.parts[0].to_dict()
+        return redirect("/mechanic/myorders")
 
 
 if __name__ == "__main__":

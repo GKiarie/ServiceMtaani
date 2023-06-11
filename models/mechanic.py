@@ -21,6 +21,7 @@ class Mechanic(BaseModel, Base, UserMixin):
     specialization = Column(String(60))
     bids = relationship("Bid", backref="mechanic", cascade="all, delete, delete-orphan")
     reviews = relationship("Review", backref="mechanic", cascade="all, delete, delete-orphan")
+    orders = relationship("Order", backref="mechanic", cascade="all, delete, delete-orphan")
 
     # def is_authenticated():
     #     return True

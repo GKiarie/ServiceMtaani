@@ -15,7 +15,8 @@ partorders = Table("parts_orders", Base.metadata,
 class Order(BaseModel, Base):
     """Order attributes"""
     __tablename__ = "orders"
-    client_id = Column(String(60), ForeignKey('clients.id'), nullable=False)
+    client_id = Column(String(60), ForeignKey('clients.id'))
+    mechanic_id = Column(String(60), ForeignKey('mechanics.id'))
     status = Column(Boolean, default=True)
     parts = relationship("Part", secondary=partorders, backref="orders", cascade="all, delete")
 
