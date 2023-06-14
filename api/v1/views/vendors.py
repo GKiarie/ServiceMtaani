@@ -17,6 +17,7 @@ from models import storage
 @app_views.route('/vendors/<vendor_id>', \
                  methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def get_vendors(vendor_id=None):
+    """Retrieves list of all vendors"""
     all_vendors = storage.all(Vendor)
     if not vendor_id:
         if request.method == "GET":
@@ -59,6 +60,7 @@ def get_vendors(vendor_id=None):
 @app_views.route("/vendors/<vendor_id>/reviews/<review_id>", \
                  methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def vendor_reviews(vendor_id=None, review_id=None):
+    """Retrieves reviews of a vendor"""
     if not vendor_id:
         abort(400)
     vendor_obj = storage.get(Vendor, vendor_id)
@@ -108,6 +110,7 @@ def vendor_reviews(vendor_id=None, review_id=None):
 @app_views.route("/vendors/<vendor_id>/parts/<part_id>", \
                  methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def vendor_parts(vendor_id=None, part_id=None):
+    """Retrieves parts associated with a vendor"""
     if not vendor_id:
         abort(400)
     vendor_obj = storage.get(Vendor, vendor_id)

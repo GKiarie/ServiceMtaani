@@ -5,6 +5,7 @@ from os import environ
 
 
 app = Flask(__name__)
+# Registering the blue print
 app.register_blueprint(app_views)
 
 

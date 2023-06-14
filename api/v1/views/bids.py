@@ -10,6 +10,7 @@ from flask import abort, request, jsonify
 @app_views.route('/jobs/<job_id>/bids', strict_slashes=False,
                  methods=["GET", "POST"])
 def get_bids_job_id(job_id):
+    """Function to get bids for a given job id"""
     job_objs = storage.all(Job).values()
     job_obj = storage.get(Job, job_id)    
     if job_obj is None:
@@ -39,6 +40,8 @@ def get_bids_job_id(job_id):
 @app_views.route('/jobs/<job_id>/bids/<bid_id>', strict_slashes=False,
                  methods=["GET", "PUT", "DELETE"])
 def get_bids_job_id_bid_id(job_id, bid_id):
+    """Function to get a bid from bids
+    of a given job id"""
     job_obj = storage.get(Job, job_id)
     bid_obj = storage.get(Bid, bid_id)    
     if job_obj is None or bid_obj is None:

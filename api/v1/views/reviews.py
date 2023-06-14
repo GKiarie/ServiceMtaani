@@ -8,6 +8,7 @@ from flask import request, jsonify, abort
 @app_views.route("/reviews", methods=["GET", "POST"], strict_slashes=False)
 @app_views.route("/reviews/<review_id>", methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def get_all_reviews(review_id=None):
+    """Retrieves list of all reviews"""
     all_reviews = storage.all(Review).values()
 
     review_list = [review.to_dict() for review in all_reviews]

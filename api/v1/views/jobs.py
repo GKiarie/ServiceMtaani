@@ -59,6 +59,7 @@ def get_all_jobs(job_id=None):
 
 @app_views.route('<client_id>/jobs', methods=["GET", "POST"], strict_slashes=False)
 def get_job_by_client_id(client_id):
+    """Retrieves list of jobs for a client"""
     client_objs = storage.all(Client).values()
     client_exists = False
     for client_obj in client_objs:

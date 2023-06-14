@@ -11,6 +11,8 @@ from flask import request, jsonify, abort
 @app_views.route("/clients", methods=["GET", "POST"],strict_slashes=False)
 @app_views.route("/clients/<client_id>", methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def get_all_clients(client_id=None):
+    """Retrieve list of all clients
+     retrieves a client """
     all_clients = storage.all(Client).values()
 
     clients_list = [client.to_dict() for client in all_clients]

@@ -10,6 +10,7 @@ from flask import request, abort, jsonify
 @app_views.route('/parts', methods=["GET", "POST"], strict_slashes=False)
 @app_views.route('/parts/<part_id>', methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def get_parts(part_id=None):
+    """Retrieves all parts"""
     all_parts = storage.all(Part)
     if not part_id:
         if request.method == "GET":
@@ -45,6 +46,7 @@ def get_parts(part_id=None):
 @app_views.route('/parts/<part_id>/images', methods=["GET", "POST"], strict_slashes=False)
 @app_views.route('/parts/<part_id>/images/<image_id>', methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def parts_images(part_id=None, image_id=None):
+    """Retrieves images of a part"""
     # all_images = storage.all(Image)
     part_obj = storage.get(Part, part_id)
     if not image_id:
@@ -82,6 +84,7 @@ def parts_images(part_id=None, image_id=None):
 @app_views.route('/parts/<part_id>/orders', \
                  methods=["GET"], strict_slashes=False)
 def parts_orders(part_id):
+    """Retrieves list of orders with a part"""
     part_obj = storage.get(Part, part_id)
     if not part_obj:
         abort(404)
@@ -91,6 +94,7 @@ def parts_orders(part_id):
     
 @app_views.route('/parts/<part_id>/purchases', strict_slashes=False)
 def parts_purchases(part_id):
+    """Retrieves purchases with apart"""
     part_obj = storage.get(Part, part_id)
     if not part_obj:
         abort(404)

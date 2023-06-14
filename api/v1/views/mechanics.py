@@ -17,6 +17,8 @@ from models import storage
 @app_views.route('/mechanics/<mechanic_id>', \
                  methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def get_mechanics(mechanic_id=None):
+    """Retrieves list of all mechanics
+    retrieces a mechanic"""
     all_mechs = storage.all(Mechanic)
     if not mechanic_id:
         if request.method == "GET":
@@ -59,6 +61,8 @@ def get_mechanics(mechanic_id=None):
 @app_views.route("/mechanics/<mechanic_id>/reviews/<review_id>", \
                  methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def mech_reviews(mechanic_id=None, review_id=None):
+    """Retrieves list of a mechanics reviews
+    retrieves a mechanics review"""
     if not mechanic_id:
         abort(400)
     mech_obj = storage.get(Mechanic, mechanic_id)
@@ -108,6 +112,7 @@ def mech_reviews(mechanic_id=None, review_id=None):
 @app_views.route("/mechanics/<mechanic_id>/bids/<bid_id>", \
                  methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def mech_bids(mechanic_id=None, bid_id=None):
+    """Retrieves a mechanics bids"""
     if not mechanic_id:
         abort(400)
     mech_obj = storage.get(Mechanic, mechanic_id)

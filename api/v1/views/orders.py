@@ -10,6 +10,7 @@ from flask import request, abort, jsonify
 @app_views.route('/orders', methods=["GET", "POST"], strict_slashes=False)
 @app_views.route('/orders/<order_id>', methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def get_orders(order_id=None):
+    """Retrieves all orders"""
     all_orders = storage.all(Order)
     if not order_id:
         if request.method == "GET":
@@ -43,6 +44,7 @@ def get_orders(order_id=None):
 @app_views.route('/orders/<order_id>/parts', methods=["GET"], strict_slashes=False)
 @app_views.route('/orders/<order_id>/parts/<part_id>', methods=["GET", "PUT", "DELETE"], strict_slashes=False)
 def order_parts(order_id=None, part_id=None):
+    """Retrieves parts related to an order"""
     order_obj = storage.get(Order, order_id)
     if not order_obj:
             abort(404)
