@@ -9,6 +9,7 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin
 
 class Mechanic(BaseModel, Base, UserMixin):
+    """Defines mechanic table attributes"""
     __tablename__ = "mechanics"
     first_name = Column(String(60), nullable=False)
     last_name = Column(String(60), nullable=False)

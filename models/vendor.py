@@ -9,6 +9,7 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin
 
 class Vendor(BaseModel, Base, UserMixin):
+    """Define vendor attributes"""
     __tablename__ = "vendors"
     first_name = Column(String(60), nullable=False)
     last_name = Column(String(60), nullable=False)

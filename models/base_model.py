@@ -36,6 +36,7 @@ class BaseModel():
         return f"Class: {self.__class__.__name__}, ID: {self.id}, DETAILS: {attributes_dict}"
     
     def to_str(self):
+        """Returns string in given fromat"""
         attributes_dict = self.__dict__.copy()
         attributes_dict['created_at'] = attributes_dict['created_at'].strftime(time)
         attributes_dict['updated_at'] = attributes_dict['updated_at'].strftime(time)
