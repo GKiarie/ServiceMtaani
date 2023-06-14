@@ -38,6 +38,7 @@ mail = Mail(app)
 
 @login_manager.user_loader
 def load_user(id):
+    """returns a user given their id"""
     if storage.find(Mechanic, "id", id):
         return storage.find(Mechanic, "id", id)
     elif storage.find(Vendor, "id", id):
@@ -146,11 +147,13 @@ def user_signup(user=None):
 @app.route('/logout', methods=["GET"], strict_slashes=False)
 @login_required
 def logout():
+    """logout root. redirects to home route"""
     logout_user()
     return redirect('/')
 
 @app.route('/test', methods=["GET", "POST"], strict_slashes=False)
 def data_post():
+    """This is a test route"""
     if request.method == "GET":
         return render_template("test_route.html")
     if request.method == "POST":
@@ -340,6 +343,7 @@ def mechanic_openbids():
 @app.route('/mechanic/activejobs', strict_slashes=False)
 @login_required
 def active_jobs():
+    """Displays mechanics active jobs"""
     mech_obj = storage.get(Mechanic, current_user.id)
     if not mech_obj:
         return redirect(url_for('homepage'))
@@ -364,6 +368,7 @@ def active_jobs():
 @app.route('/mechanic/completedjobs', strict_slashes=False)
 @login_required
 def completed_jobs():
+    """Dispalys mechanics completed jobs"""
     mech_obj = storage.get(Mechanic, current_user.id)
     if not mech_obj:
         return redirect(url_for('homepage'))
@@ -386,6 +391,7 @@ def completed_jobs():
 @app.route('/mechanic/reviews', strict_slashes=False)
 @login_required
 def mechanic_reviews():
+    """Ftn that returns mechanics reviews"""
     mech_obj = storage.get(Mechanic, current_user.id)
     if not mech_obj:
         return redirect(url_for('homepage'))
@@ -400,6 +406,7 @@ def mechanic_reviews():
 
 
 def open_jobs(client_id):
+    """Ftn that returns a clients open jobs"""
     client_obj = storage.get(Client, client_id)
     jobs = {}
     for job in client_obj.jobs:
@@ -432,6 +439,7 @@ def open_jobs(client_id):
 
 
 def all_parts():
+    """Ftn that retries all parts from db"""
     all_parts = storage.all(Part)
     parts = []
     for part in all_parts.values():
@@ -493,6 +501,7 @@ def client_home():
 @app.route('/client/activejobs', methods=["GET", "POST"], strict_slashes=False)
 @login_required
 def client_active_jobs():
+    """Displays HTML page with clients active jobs"""
     active_jobs = storage.query_active_jobs(current_user.id)
     parts = all_parts()
     if request.method == "GET":
@@ -542,6 +551,7 @@ def client_active_jobs():
 @app.route('/client/completedjobs', methods=["GET", "POST"], strict_slashes=False)
 @login_required
 def client_completed_jobs():
+    """Displays HTML page with clients completed jobs"""
     parts = all_parts()
     if request.method == "GET":
         completed_jobs = storage.query_completed_jobs(current_user.id)
@@ -567,6 +577,7 @@ def client_completed_jobs():
 @app.route('/client/myorders', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def client_orders():
+    """Displays HTML page with all client orders"""
     client_obj = storage.get(Client, current_user.id)
 
     parts = all_parts()
@@ -609,6 +620,7 @@ def client_orders():
 @app.route('/mechanic/myorders', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def mech_orders():
+    """Displays HTML page with all mechanics orders"""
     mech_obj = storage.get(Mechanic, current_user.id)
 
     parts = all_parts()
